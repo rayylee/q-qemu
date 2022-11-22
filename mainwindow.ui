@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
    <property name="font">
@@ -94,8 +94,11 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionNew2"/>
-   <addaction name="actionSetting2"/>
+   <addaction name="actionVMSetting"/>
    <addaction name="separator"/>
+   <addaction name="actionStart"/>
+   <addaction name="actionShutdown"/>
+   <addaction name="actionPoweroff"/>
   </widget>
   <action name="actionNew1">
    <property name="icon">
@@ -151,10 +154,10 @@
     <string>New</string>
    </property>
   </action>
-  <action name="actionSetting2">
+  <action name="actionVMSetting">
    <property name="icon">
     <iconset resource="resourse.qrc">
-     <normaloff>:/Resources/configure.svg</normaloff>:/Resources/configure.svg</iconset>
+     <normaloff>:/Resources/vm_configure.svg</normaloff>:/Resources/vm_configure.svg</iconset>
    </property>
    <property name="text">
     <string>setting</string>
@@ -167,6 +170,33 @@
    </property>
    <property name="text">
     <string>Export</string>
+   </property>
+  </action>
+  <action name="actionStart">
+   <property name="icon">
+    <iconset resource="resourse.qrc">
+     <normaloff>:/Resources/start.svg</normaloff>:/Resources/start.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Start</string>
+   </property>
+  </action>
+  <action name="actionShutdown">
+   <property name="icon">
+    <iconset resource="resourse.qrc">
+     <normaloff>:/Resources/stop.svg</normaloff>:/Resources/stop.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Shutdown</string>
+   </property>
+  </action>
+  <action name="actionPoweroff">
+   <property name="icon">
+    <iconset resource="resourse.qrc">
+     <normaloff>:/Resources/poweroff.svg</normaloff>:/Resources/poweroff.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Poweroff</string>
    </property>
   </action>
  </widget>

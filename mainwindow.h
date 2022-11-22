@@ -16,18 +16,28 @@ public:
     ~MainWindow();
 
 private:
-    void _newMachineWizard();
+    void _new_machine_wizard();
+    void _main_setting();
 
 private slots:
+    void recv_qemu_dir(QString);
+
     void on_actionAbout_triggered();
 
     void on_actionNew1_triggered();
 
     void on_actionNew2_triggered();
 
+    void on_actionStart_triggered();
+
+    void on_actionSetting1_triggered();
+
+    void on_actionVMSetting_triggered();
+
 private:
     Ui::MainWindow *ui;
 
     QString m_app_path;
+    QString m_qemu_dir;
 };
 #endif // MAINWINDOW_H

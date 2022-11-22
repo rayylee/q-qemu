@@ -20,6 +20,9 @@ NewMachineWidget::NewMachineWidget(QWidget *parent) :
 
 void NewMachineWidget::_on_finished(int result)
 {
+    if (!result)
+        return;
+
     QString name = ui->vmNameLineEdit->text();
     QString os_type = ui->osTypeComboBox->currentText();
     QString disk1_path = ui->disk1Path->text();

@@ -10,6 +10,17 @@ VirtualMachine::VirtualMachine()
 
 }
 
+VirtualMachine::VirtualMachine(QString xml_path)
+{
+    QFile file(xml_path);
+    file.open(QIODevice::ReadOnly);
+    QByteArray all_array=file.readAll();
+    QString all_string = QString(all_array);
+    file.close();
+
+    qDebug().noquote() << "Read: \n" << all_string;
+}
+
 VirtualMachine::~VirtualMachine()
 {
 

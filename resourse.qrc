@@ -8,5 +8,9 @@
         <file>Resources/import.svg</file>
         <file>Resources/export.svg</file>
         <file>Resources/qemu.png</file>
+        <file>Resources/poweroff.svg</file>
+        <file>Resources/start.svg</file>
+        <file>Resources/stop.svg</file>
+        <file>Resources/vm_configure.svg</file>
     </qresource>
 </RCC>

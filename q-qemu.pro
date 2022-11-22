@@ -11,6 +11,7 @@ CONFIG += c++11
 SOURCES += \
     helpdialog.cpp \
     main.cpp \
+    mainsetting.cpp \
     mainwindow.cpp \
     newmachinewidget.cpp \
     virtualmachine.cpp \
@@ -18,6 +19,7 @@ SOURCES += \
 
 HEADERS += \
     helpdialog.h \
+    mainsetting.h \
     mainwindow.h \
     newmachinewidget.h \
     virtualmachine.h \
@@ -25,6 +27,7 @@ HEADERS += \
 
 FORMS += \
     helpdialog.ui \
+    mainsetting.ui \
     mainwindow.ui \
     newmachinewidget.ui
 
