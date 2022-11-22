@@ -1,10 +1,12 @@
 #include <QDebug>
 #include <QFile>
 #include <QDomDocument>
+#include <QFileDialog>
+#include <QStandardPaths>
 
-#include "newmachinewidget.h"
 #include "ui_newmachinewidget.h"
-
+#include "newmachinewidget.h"
+#include "virtualmachine.h"
 
 NewMachineWidget::NewMachineWidget(QWidget *parent) :
     QWizard(parent),
@@ -18,33 +20,48 @@ NewMachineWidget::NewMachineWidget(QWidget *parent) :
 
 void NewMachineWidget::_on_finished(int result)
 {
-    qDebug() << "VM Name: "<< ui->vmNameLineEdit->text();
-    qDebug() << "Select OS Type: "<< ui->osTypeComboBox->currentText();
+    QString name = ui->vmNameLineEdit->text();
+    QString os_type = ui->osTypeComboBox->currentText();
+    QString disk1_path = ui->disk1Path->text();
+    QString disk1_type = ui->disk1ComboBox->currentText();
+    QString disk2_path = ui->disk2Path->text();
+    QString disk2_type = ui->disk2ComboBox->currentText();
+    QString cdrom_path = ui->cdromPath->text();
 
-    QString xmlString;
-    QDomDocument doc;
+    QString home_local = QStandardPaths::writableLocation(
+                QStandardPaths::HomeLocation);
 
-    QDomElement rootElement = doc.createElement("domain");
-    rootElement.setAttribute("type", "kvm");
-    doc.appendChild(rootElement);
+    qDebug() << "User HOME: " << home_local;
+    qDebug() << "VM Name: "<< name;
+    qDebug() << "Select OS Type: "<< os_type;
 
-    QDomElement nameElement = doc.createElement("name");
-    nameElement.appendChild(doc.createTextNode("testvm"));
-    rootElement.appendChild(nameElement);
+    VirtualMachine vm = VirtualMachine();
 
-    QDomElement osElement = doc.createElement("os");
-    QDomElement osSystemElement = doc.createElement("system");
-    osSystemElement.appendChild(doc.createTextNode("linux"));
-    osElement.appendChild(osSystemElement);
-    rootElement.appendChild(osElement);
+    vm.set_name(name);
+    vm.set_os_type(os_type);
+    vm.set_disk(0, disk1_path, disk1_type);
+    vm.set_disk(1, disk2_path, disk2_type);
+    vm.set_cdrom(cdrom_path);
 
-    QTextStream outStream(&xmlString);
-    doc.save(outStream, 4);
-
-    qDebug().noquote() << xmlString;
+    qDebug().noquote() << vm.to_xml_string();
 }
 
 NewMachineWidget::~NewMachineWidget()
 {
     delete ui;
+}
+
+void NewMachineWidget::on_choseDisk1Button_clicked()
+{
+   ui->disk1Path->setText(QFileDialog::getOpenFileName(this));
+}
+
+void NewMachineWidget::on_choseDisk2Button_clicked()
+{
+    ui->disk2Path->setText(QFileDialog::getOpenFileName(this));
+}
+
+void NewMachineWidget::on_choseCdromButton_clicked()
+{
+    ui->cdromPath->setText(QFileDialog::getOpenFileName(this));
 }

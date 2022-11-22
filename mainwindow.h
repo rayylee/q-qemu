@@ -21,11 +21,13 @@ private:
 private slots:
     void on_actionAbout_triggered();
 
-    void on_actionNew_1_triggered();
+    void on_actionNew1_triggered();
 
-    void on_actionNew_2_triggered();
+    void on_actionNew2_triggered();
 
 private:
     Ui::MainWindow *ui;
+
+    QString m_app_path;
 };
 #endif // MAINWINDOW_H

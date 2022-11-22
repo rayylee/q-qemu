@@ -24,7 +24,7 @@
     <item row="0" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout" stretch="2,8">
       <item>
-       <widget class="QListView" name="listView"/>
+       <widget class="QListWidget" name="vmlistWidget"/>
       </item>
       <item>
        <widget class="QTextBrowser" name="textBrowser"/>
@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="font">
@@ -57,10 +57,10 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionNew_1"/>
+    <addaction name="actionNew1"/>
     <addaction name="actionImport"/>
     <addaction name="actionExport"/>
-    <addaction name="actionSetting_1"/>
+    <addaction name="actionSetting1"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -93,11 +93,11 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionNew_2"/>
-   <addaction name="actionSetting_2"/>
+   <addaction name="actionNew2"/>
+   <addaction name="actionSetting2"/>
    <addaction name="separator"/>
   </widget>
-  <action name="actionNew_1">
+  <action name="actionNew1">
    <property name="icon">
     <iconset resource="resourse.qrc">
      <normaloff>:/Resources/new_tab.png</normaloff>:/Resources/new_tab.png</iconset>
@@ -115,7 +115,7 @@
     <string>Import</string>
    </property>
   </action>
-  <action name="actionSetting_1">
+  <action name="actionSetting1">
    <property name="icon">
     <iconset resource="resourse.qrc">
      <normaloff>:/Resources/configure.svg</normaloff>:/Resources/configure.svg</iconset>
@@ -142,7 +142,7 @@
     <string>About</string>
    </property>
   </action>
-  <action name="actionNew_2">
+  <action name="actionNew2">
    <property name="icon">
     <iconset resource="resourse.qrc">
      <normaloff>:/Resources/new_tab.png</normaloff>:/Resources/new_tab.png</iconset>
@@ -151,7 +151,7 @@
     <string>New</string>
    </property>
   </action>
-  <action name="actionSetting_2">
+  <action name="actionSetting2">
    <property name="icon">
     <iconset resource="resourse.qrc">
      <normaloff>:/Resources/configure.svg</normaloff>:/Resources/configure.svg</iconset>

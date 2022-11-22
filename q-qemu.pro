@@ -12,12 +12,16 @@ SOURCES += \
     helpdialog.cpp \
     main.cpp \
     mainwindow.cpp \
-    newmachinewidget.cpp
+    newmachinewidget.cpp \
+    virtualmachine.cpp \
+    virtualmachinedom.cpp
 
 HEADERS += \
     helpdialog.h \
     mainwindow.h \
-    newmachinewidget.h
+    newmachinewidget.h \
+    virtualmachine.h \
+    virtualmachinedom.h
 
 FORMS += \
     helpdialog.ui \

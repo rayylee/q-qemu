@@ -135,9 +135,9 @@
    </property>
    <layout class="QGridLayout" name="gridLayout_3">
     <item row="0" column="0">
-     <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="3,7">
+     <layout class="QHBoxLayout" name="hLayout_hardware" stretch="3,7">
       <item>
-       <widget class="QLabel" name="label_7">
+       <widget class="QLabel" name="label_hardware">
         <property name="text">
          <string/>
         </property>
@@ -147,7 +147,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QTabWidget" name="tabWidget_2">
+       <widget class="QTabWidget" name="tabWidget_hardware">
         <property name="currentIndex">
          <number>0</number>
         </property>
@@ -199,9 +199,9 @@
    </property>
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0">
-     <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="3,7">
+     <layout class="QHBoxLayout" name="horizontalLayout_disks" stretch="3,7">
       <item>
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="label_disks">
         <property name="text">
          <string/>
         </property>
@@ -211,29 +211,169 @@
        </widget>
       </item>
       <item>
-       <widget class="QTabWidget" name="tabWidget">
+       <widget class="QTabWidget" name="tabWidget_disks">
         <property name="currentIndex">
          <number>0</number>
         </property>
         <widget class="QWidget" name="tab_disk1">
          <attribute name="title">
-          <string>Disk</string>
+          <string>hd1</string>
          </attribute>
          <layout class="QGridLayout" name="gridLayout_4">
           <item row="0" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_6">
+           <layout class="QVBoxLayout" name="verticalLayout_2">
             <item>
-             <widget class="QLabel" name="label_8">
+             <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,2,5">
+              <item>
+               <widget class="QLabel" name="labeltype_disk1">
+                <property name="text">
+                 <string>Type: </string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="disk1ComboBox">
+                <item>
+                 <property name="text">
+                  <string>qcow2</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>raw</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,5,2">
+              <item>
+               <widget class="QLabel" name="labelpath_disk1">
+                <property name="text">
+                 <string>Path:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="disk1Path"/>
+              </item>
+              <item>
+               <widget class="QPushButton" name="choseDisk1Button">
+                <property name="text">
+                 <string>Chose</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="tab_disk2">
+         <attribute name="title">
+          <string>hd2</string>
+         </attribute>
+         <layout class="QGridLayout" name="gridLayout_7">
+          <item row="0" column="0">
+           <layout class="QVBoxLayout" name="verticalLayout_5">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="1,2,5">
+              <item>
+               <widget class="QLabel" name="labeltype_disk2">
+                <property name="text">
+                 <string>Type:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="disk2ComboBox">
+                <item>
+                 <property name="text">
+                  <string>qcow2</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>raw</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_2">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="1,5,2">
+              <item>
+               <widget class="QLabel" name="labelpath_disk2">
+                <property name="text">
+                 <string>Path:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="disk2Path"/>
+              </item>
+              <item>
+               <widget class="QPushButton" name="choseDisk2Button">
+                <property name="text">
+                 <string>Chose</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="tab_cdrom">
+         <attribute name="title">
+          <string>cdrom</string>
+         </attribute>
+         <layout class="QGridLayout" name="gridLayout_8">
+          <item row="0" column="0">
+           <layout class="QHBoxLayout" name="hLayout_cdrom">
+            <item>
+             <widget class="QLabel" name="label_cdrom">
               <property name="text">
                <string>Path:</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="diskPath"/>
+             <widget class="QLineEdit" name="cdromPath"/>
             </item>
             <item>
-             <widget class="QPushButton" name="choseDiskButton">
+             <widget class="QPushButton" name="choseCdromButton">
               <property name="text">
                <string>Chose</string>
               </property>
