@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Resources/new_tab.png</file>
+        <file>Resources/information.png</file>
+        <file>Resources/settings-configure.svg</file>
+        <file>Resources/configure.svg</file>
+        <file>Resources/application-exit.svg</file>
+        <file>Resources/import.svg</file>
+        <file>Resources/export.svg</file>
+        <file>Resources/qemu.png</file>
+    </qresource>
+</RCC>
