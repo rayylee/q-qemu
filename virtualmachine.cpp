@@ -18,7 +18,11 @@ VirtualMachine::VirtualMachine(QString xml_path)
     QString all_string = QString(all_array);
     file.close();
 
-    qDebug().noquote() << "Read: \n" << all_string;
+    VirtualMachineDom dom = VirtualMachineDom(all_string);
+
+    qDebug() << "Read Name      : " << dom.get_name();
+    qDebug() << "Read OS Type   : " << dom.get_os_type();
+    qDebug() << "Read Disk count: " << dom.get_disk_count();
 }
 
 VirtualMachine::~VirtualMachine()

@@ -23,7 +23,7 @@
    <item row="0" column="0">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
+      <layout class="QHBoxLayout" name="horizontalLayout" stretch="2,7,1">
        <item>
         <widget class="QLabel" name="label">
          <property name="text">
@@ -34,7 +34,7 @@
        <item>
         <widget class="QLineEdit" name="qemuDirLineEdit">
          <property name="text">
-          <string>D:\Program Files\qemu</string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -42,6 +42,24 @@
         <widget class="QPushButton" name="choseQemuDirButton">
          <property name="text">
           <string>Chose</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="2,8">
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Qemu binary:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="qemuBinLabel">
+         <property name="text">
+          <string>-</string>
          </property>
         </widget>
        </item>

@@ -10,6 +10,7 @@ class VirtualMachineDom
 {
 public:
     VirtualMachineDom();
+    VirtualMachineDom(QString xml_string);
     ~VirtualMachineDom();
 
 private:
@@ -21,6 +22,10 @@ public:
     void set_os_type(QString);
     void append_disk(QString, QString);
     void append_cdrom(QString);
+
+    QString get_name();
+    QString get_os_type();
+    int get_disk_count();
 
     QString to_xml_string();
 

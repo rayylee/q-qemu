@@ -2,6 +2,7 @@
 #include <QStandardPaths>
 #include <QLabel>
 #include <QDebug>
+#include <QDirIterator>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -9,6 +10,7 @@
 #include "newmachinewidget.h"
 #include "mainsetting.h"
 #include "virtualmachine.h"
+#include "config/global_setting.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -25,15 +27,25 @@ MainWindow::MainWindow(QWidget *parent)
                 QStandardPaths::HomeLocation);
 
     QDir dir_home(home_path);
-    m_app_path = QDir::toNativeSeparators(dir_home.absoluteFilePath(".q-qemu"));
-    QDir dir_app(m_app_path);
+    m_app_dir = QDir::toNativeSeparators(dir_home.absoluteFilePath(".q-qemu"));
+    QDir dir_app(m_app_dir);
     if(!dir_app.exists()) {
-        dir_app.mkpath(m_app_path);
+        dir_app.mkpath(m_app_dir);
     }
 
     if (ui->vmlistWidget->count() > 0) {
         ui->vmlistWidget->setCurrentRow(0);
     }
+
+    GlobalSetting s = GlobalSetting(m_app_dir);
+    m_qemu_dir = s.qemu_dir();
+    if (m_qemu_dir.isEmpty()) {
+        m_qemu_dir = QDir::toNativeSeparators("D:/Program Files/qemu");
+        s.set_qemu_dir(m_qemu_dir);
+        s.search_qemu_binary();
+        s.save_config();
+    }
+    m_qemu_binary_path = s.qemu_binary_path();
 }
 
 MainWindow::~MainWindow()
@@ -50,9 +62,10 @@ void MainWindow::_new_machine_wizard()
     w->show();
 }
 
-void MainWindow::recv_qemu_dir(QString qemu_dir)
+void MainWindow::recv_qemu_dir(QString qemu_dir, QString qemu_binary_path)
 {
     m_qemu_dir = qemu_dir;
+    m_qemu_binary_path = qemu_binary_path;
 }
 
 void MainWindow::on_actionAbout_triggered()
@@ -83,7 +96,7 @@ void MainWindow::on_actionStart_triggered()
         return;
     }
 
-    QDir dir_app(m_app_path);
+    QDir dir_app(m_app_dir);
     QString xml_path = QDir::toNativeSeparators(
                 dir_app.absoluteFilePath(items.at(0)->text() + ".xml"));
 
@@ -100,7 +113,7 @@ void MainWindow::_main_setting()
 {
     MainSetting *w = new MainSetting();
 
-    w->set_qemu_dir(m_qemu_dir);
+    w->set_app_dir(m_app_dir);
     w->setWindowModality(Qt::ApplicationModal);
 
     connect(w, &MainSetting::send_qemu_dir,

@@ -20,7 +20,7 @@ private:
     void _main_setting();
 
 private slots:
-    void recv_qemu_dir(QString);
+    void recv_qemu_dir(QString, QString);
 
     void on_actionAbout_triggered();
 
@@ -37,7 +37,8 @@ private slots:
 private:
     Ui::MainWindow *ui;
 
-    QString m_app_path;
+    QString m_app_dir;
     QString m_qemu_dir;
+    QString m_qemu_binary_path;
 };
 #endif // MAINWINDOW_H
