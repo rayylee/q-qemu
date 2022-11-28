@@ -24,7 +24,11 @@
     <item row="0" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout" stretch="2,8">
       <item>
-       <widget class="QListWidget" name="vmlistWidget"/>
+       <widget class="QListWidget" name="vmlistWidget">
+        <property name="contextMenuPolicy">
+         <enum>Qt::CustomContextMenu</enum>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QTextBrowser" name="textBrowser"/>
@@ -39,7 +43,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="font">

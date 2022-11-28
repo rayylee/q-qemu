@@ -8,7 +8,7 @@ VirtualMachineDom::~VirtualMachineDom()
 VirtualMachineDom::VirtualMachineDom()
 {
     m_root = m_doc.createElement("domain");
-    m_root.setAttribute("type", "qemu");
+    m_root.setAttribute("type", "tcg");
     m_doc.appendChild(m_root);
 }
 
@@ -18,6 +18,59 @@ VirtualMachineDom::VirtualMachineDom(QString xml_string)
         return;
     }
     m_root = m_doc.documentElement();
+}
+
+VirtualMachineDom::VirtualMachineDom(QFile& f)
+{
+    f.open(QIODevice::ReadOnly);
+    QString all_string = QString(f.readAll());
+    f.close();
+
+    if (!m_doc.setContent(all_string)) {
+        return;
+    }
+    m_root = m_doc.documentElement();
+}
+
+QString VirtualMachineDom::get_accelerator()
+{
+    if (m_root.hasAttribute("type")) {
+        return m_root.attribute("type");
+    }
+    return QString("");
+}
+
+QString VirtualMachineDom::get_domain_id()
+{
+    if (m_root.hasAttribute("id")) {
+        return m_root.attribute("id");
+    }
+    return QString("");
+}
+
+QString VirtualMachineDom::get_emulator()
+{
+    QDomElement devices_element;
+    QDomNodeList nodes = m_root.childNodes();
+    for(int i = 0; i < nodes.count(); i++) {
+        QDomNode node = nodes.at(i);
+        if (!node.nodeName().compare("devices")) {
+            devices_element = nodes.at(i).toElement();
+        }
+    }
+
+    if (devices_element.isNull()) {
+        return QString("");
+    }
+
+    QDomNodeList devices_nodes = devices_element.childNodes();
+    for(int i = 0; i < devices_nodes.count(); i++) {
+        QDomElement ele = devices_nodes.at(i).toElement();
+        if (!ele.nodeName().compare("emulator")) {
+            return ele.firstChild().nodeValue();
+        }
+    }
+    return QString("");
 }
 
 QString VirtualMachineDom::get_name()
@@ -66,6 +119,130 @@ QString VirtualMachineDom::get_os_type()
     return QString("");
 }
 
+QString VirtualMachineDom::get_disk_type(int index)
+{
+    QDomElement devices_element;
+    QDomNodeList nodes = m_root.childNodes();
+    for(int i = 0; i < nodes.count(); i++) {
+        QDomNode node = nodes.at(i);
+        if (!node.nodeName().compare("devices")) {
+            devices_element = nodes.at(i).toElement();
+        }
+    }
+
+    if (devices_element.isNull()) {
+        return QString("");
+    }
+
+
+    QDomNodeList devices_nodes = devices_element.childNodes();
+    for(int i = 0, j = 0; i < devices_nodes.count(); i++) {
+        QDomElement ele = devices_nodes.at(i).toElement();
+        if (ele.hasAttribute("device") &&
+                !ele.attribute("device").compare("disk")) {
+            if (j != index) {
+                j++;
+                continue;
+            }
+            QDomNodeList disk_nodes = ele.childNodes();
+            for(int m = 0; m < disk_nodes.count(); m++) {
+                QDomElement ele_disk = disk_nodes.at(m).toElement();
+                if (!ele_disk.nodeName().compare("driver")) {
+                    if (ele_disk.hasAttribute("type")) {
+                        return ele_disk.attribute("type");
+                    }
+                }
+            }
+            return QString("");
+        }
+    }
+
+    return QString("");
+}
+
+QString VirtualMachineDom::get_disk_file(int index)
+{
+    QDomElement devices_element;
+    QDomNodeList nodes = m_root.childNodes();
+    for(int i = 0; i < nodes.count(); i++) {
+        QDomNode node = nodes.at(i);
+        if (!node.nodeName().compare("devices")) {
+            devices_element = nodes.at(i).toElement();
+        }
+    }
+
+    if (devices_element.isNull()) {
+        return QString("");
+    }
+
+
+    QDomNodeList devices_nodes = devices_element.childNodes();
+    for(int i = 0, j = 0; i < devices_nodes.count(); i++) {
+        QDomElement ele = devices_nodes.at(i).toElement();
+        if (ele.hasAttribute("device") &&
+                !ele.attribute("device").compare("disk")) {
+            if (j != index) {
+                j++;
+                continue;
+            }
+            QDomNodeList disk_nodes = ele.childNodes();
+            for(int m = 0; m < disk_nodes.count(); m++) {
+                QDomElement ele_disk = disk_nodes.at(m).toElement();
+                if (!ele_disk.nodeName().compare("source")) {
+                    if (ele_disk.hasAttribute("file")) {
+                        return ele_disk.attribute("file");
+                    }
+                }
+            }
+            return QString("");
+        }
+    }
+
+    return QString("");
+}
+
+QString VirtualMachineDom::get_cdrom_file(int index)
+{
+    QDomElement devices_element;
+    QDomNodeList nodes = m_root.childNodes();
+    for(int i = 0; i < nodes.count(); i++) {
+        QDomNode node = nodes.at(i);
+        if (!node.nodeName().compare("devices")) {
+            devices_element = nodes.at(i).toElement();
+        }
+    }
+
+    if (devices_element.isNull()) {
+        return QString("");
+    }
+
+
+    QDomNodeList devices_nodes = devices_element.childNodes();
+    for(int i = 0, j = 0; i < devices_nodes.count(); i++) {
+        QDomElement ele = devices_nodes.at(i).toElement();
+        if (ele.hasAttribute("device") &&
+                !ele.attribute("device").compare("cdrom")) {
+
+            if (j != index) {
+                j++;
+                continue;
+            }
+
+            QDomNodeList disk_nodes = ele.childNodes();
+            for(int m = 0; m < disk_nodes.count(); m++) {
+                QDomElement ele_disk = disk_nodes.at(m).toElement();
+                if (!ele_disk.nodeName().compare("source")) {
+                    if (ele_disk.hasAttribute("file")) {
+                        return ele_disk.attribute("file");
+                    }
+                }
+            }
+        }
+    }
+
+    return QString("");
+}
+
 int VirtualMachineDom::get_disk_count()
 {
     int count = 0;
@@ -96,9 +273,44 @@ int VirtualMachineDom::get_disk_count()
     return count;
 }
 
+int VirtualMachineDom::get_cdrom_count()
+{
+    int count = 0;
+
+    QDomElement devices_element;
+    QDomNodeList nodes = m_root.childNodes();
+    for(int i = 0; i < nodes.count(); i++) {
+        QDomNode node = nodes.at(i);
+        if (!node.nodeName().compare("devices")) {
+            devices_element = nodes.at(i).toElement();
+        }
+    }
+
+    if (devices_element.isNull()) {
+        return count;
+    }
+
+
+    QDomNodeList devices_nodes = devices_element.childNodes();
+    for(int i = 0; i < devices_nodes.count(); i++) {
+        QDomElement ele = devices_nodes.at(i).toElement();
+        if (ele.hasAttribute("device") &&
+                !ele.attribute("device").compare("cdrom")) {
+            count++;
+        }
+    }
+
+    return count;
+}
+
 void VirtualMachineDom::set_accelerator(QString accel)
 {
     m_root.setAttribute("type", accel);
+}
+
+void VirtualMachineDom::set_domain_id(QString id)
+{
+    m_root.setAttribute("id", id);
 }
 
 void VirtualMachineDom::set_name(QString name)
@@ -165,6 +377,23 @@ QDomElement VirtualMachineDom::_add_devices_element()
     }
 
     return devices_nodes.at(0).toElement();
+}
+
+void VirtualMachineDom::set_emulator(QString emu_path)
+{
+    QDomElement devices_element = _add_devices_element();
+
+    QDomNodeList devices_nodes = devices_element.childNodes();
+    for(int i = 0; i < devices_nodes.count(); i++) {
+        QDomElement ele = devices_nodes.at(i).toElement();
+        if (!ele.nodeName().compare("emulator")) {
+            ele.firstChild().setNodeValue(emu_path);
+            return;
+        }
+    }
+    QDomElement emulator_element = m_doc.createElement("emulator");
+    emulator_element.appendChild(m_doc.createTextNode(emu_path));
+    devices_element.appendChild(emulator_element);
 }
 
 void VirtualMachineDom::append_disk(QString disk_path, QString driver_type)

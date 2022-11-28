@@ -1,6 +1,9 @@
 #include <QDebug>
 #include <QFile>
+#include <QDir>
 #include <QDomDocument>
+#include <QProcess>
+#include <QTcpSocket>
 
 #include "virtualmachine.h"
 #include "virtualmachinedom.h"
@@ -10,19 +13,30 @@ VirtualMachine::VirtualMachine()
 
 }
 
-VirtualMachine::VirtualMachine(QString xml_path)
-{
+VirtualMachine::VirtualMachine(const QString& xml_path)
+{   
     QFile file(xml_path);
-    file.open(QIODevice::ReadOnly);
-    QByteArray all_array=file.readAll();
-    QString all_string = QString(all_array);
-    file.close();
+    if (!file.open(QIODevice::ReadOnly)) {
+        return;
+    }
+    QString all_string = QString(file.readAll());
+    file.close();    
 
     VirtualMachineDom dom = VirtualMachineDom(all_string);
-
-    qDebug() << "Read Name      : " << dom.get_name();
-    qDebug() << "Read OS Type   : " << dom.get_os_type();
-    qDebug() << "Read Disk count: " << dom.get_disk_count();
+    m_domain_id = dom.get_domain_id();
+    m_accelerator = dom.get_accelerator();
+    m_qemu_binary_path = dom.get_emulator();
+    m_name = dom.get_name();
+    m_os_type = dom.get_os_type();
+    int disk_count = dom.get_disk_count();
+    for (int i = 0; i < disk_count && i < MAX_DISK_COUNT ; i++) {
+        m_disks[i].driver_type = dom.get_disk_type(i);
+        m_disks[i].file_path = dom.get_disk_file(i);
+    }
+    int cdrom_count = dom.get_cdrom_count();
+    for (int i = 0; i < cdrom_count && i < MAX_CDROM_COUNT ; i++) {
+        m_cdroms[i].file_path = dom.get_disk_file(i);
+    }
 }
 
 VirtualMachine::~VirtualMachine()
@@ -30,10 +44,41 @@ VirtualMachine::~VirtualMachine()
 
 }
 
+void VirtualMachine::start(QString& ssh_port, QString& monitor_port)
+{
+    QStringList qemuCommand;
+
+    m_ssh_listen = ssh_port.toUInt() + m_domain_id.toUInt() - 1;
+    m_monitor_listen = monitor_port.toUInt() + m_domain_id.toUInt() - 1;
+
+    qemuCommand << "-monitor"
+                << QString("tcp:localhost:%1,server,nowait")
+                   .arg(m_monitor_listen);
+
+    qemuCommand << "-name";
+    qemuCommand << QString("%1_%2").arg(m_name).arg(m_domain_id);
+
+    qemuCommand << "-accel";
+    qemuCommand << m_accelerator;
+
+    qemuCommand << "-hda";
+    qemuCommand << m_disks[0].file_path;
+
+    QString program = QDir::toNativeSeparators(m_qemu_binary_path);
+
+    qDebug() << "qemu: " << m_qemu_binary_path;
+    qDebug() << program << qemuCommand;
+
+    m_process = new QProcess();
+    m_process->start(program, qemuCommand);
+}
+
 QString VirtualMachine::to_xml_string()
 {    
     VirtualMachineDom vmDom = VirtualMachineDom();
 
+    vmDom.set_emulator(m_qemu_binary_path);
+    vmDom.set_domain_id(m_domain_id);
     vmDom.set_name(m_name);
     vmDom.set_os_type(m_os_type);
 
@@ -45,41 +90,9 @@ QString VirtualMachine::to_xml_string()
         vmDom.append_disk(m_disks[1].file_path, "qcow2");
     }
 
-    if (m_cdrom.length() > 0) {
-        vmDom.append_cdrom(m_cdrom);
+    if (m_cdroms[0].file_path.length() > 0) {
+        vmDom.append_cdrom(m_cdroms[0].file_path);
     }
-
-//    QString xml_string;
-//    QDomDocument doc;
-
-//    QDomElement root_element = doc.createElement("domain");
-//    root_element.setAttribute("type", "kvm");
-//    doc.appendChild(root_element);
-
-//    QDomElement name_element = doc.createElement("name");
-//    name_element.appendChild(doc.createTextNode(m_name));
-//    root_element.appendChild(name_element);
-
-//    QDomElement os_element = doc.createElement("os");
-//    QDomElement os_system_element = doc.createElement("system");
-//    os_system_element.appendChild(doc.createTextNode(m_os_type));
-//    os_element.appendChild(os_system_element);
-//    root_element.appendChild(os_element);
-
-//    QDomElement devices_element = doc.createElement("devices");
-//    devices_element.setAttribute("type", "file");
-//    devices_element.setAttribute("device", "disk");
-//    root_element.appendChild(devices_element);
-
-//    QDomElement devices_disk = doc.createElement("disk");
-//    devices_element.appendChild(devices_disk);
-
-//    QDomElement disk_source = doc.createElement("source");
-//    disk_source.setAttribute("file", m_disks[0]);
-//    devices_disk.appendChild(disk_source);
-
-//    QTextStream out_stream(&xml_string);
-//    doc.save(out_stream, 4);
 
     return vmDom.to_xml_string();
 }

@@ -25,7 +25,14 @@ GlobalSetting::GlobalSetting(QString app_dir)
             m_qemu_dir = setting.value(key).toString();
         } else if (!key.compare("qemu-bin")) {
             m_qemu_binary_path = setting.value(key).toString();
+        } else if (!key.compare("bitmap")) {
+            m_bitmap_string = setting.value(key).toString();
+        } else if (!key.compare("monitor-port")) {
+            m_monitor_port = setting.value(key).toString();
+        } else if (!key.compare("ssh-port")) {
+            m_ssh_port = setting.value(key).toString();
         }
+
     }
 
     setting.endGroup();
@@ -63,8 +70,13 @@ void GlobalSetting::save_config()
 
     setting.beginGroup("global");
 
+    setting.setValue("ssh-port", m_ssh_port);
+    setting.setValue("monitor-port", m_monitor_port);
     setting.setValue("qemu-dir", m_qemu_dir);
-    setting.setValue("qemu-bin", m_qemu_binary_path);
+    setting.setValue("qemu-bin", m_qemu_binary_path);    
+    setting.setValue("bitmap", m_bitmap_string);
 
     setting.endGroup();
 }
+
+

@@ -2,9 +2,18 @@
 #define VIRTUALMACHINE_H
 
 #include <QString>
+#include <QProcess>
+#include <QTcpSocket>
+
+#define MAX_DISK_COUNT  10
+#define MAX_CDROM_COUNT 10
 
 struct VMDisk {
     QString driver_type;
+    QString file_path;
+};
+
+struct VMCdrom {
     QString file_path;
 };
 
@@ -13,34 +22,42 @@ class VirtualMachine
 
 public:
     VirtualMachine();
-    VirtualMachine(QString);
+    VirtualMachine(const QString&);
     ~VirtualMachine();
+
+    void start(QString& ssh_port, QString& monitor_port);
 
     QString to_xml_string();
 
-    void set_qemu_path(QString in) { m_qemu_path = in; }
+    void set_domain_id(QString in) { m_domain_id = in; }
+    void set_qemu_bin_path(QString in) { m_qemu_binary_path = in; }
     void set_name(QString in) { m_name = in; }
     void set_os_type(QString in) { m_os_type = in; }
     void set_disk(int index, QString file_path, QString driver_type) {
         m_disks[index].file_path = file_path;
         m_disks[index].driver_type = driver_type;
     }
-    void set_cdrom(QString in) { m_cdrom = in; }
+    void set_cdrom(int index, QString file_path) {
+        m_cdroms[index].file_path = file_path;
+    }
 
-    QString qemu_path() { return m_qemu_path; }
     QString name() { return m_name; }
-    QString os_type() { return m_os_type; }
-    QString disk_path(int index) { return m_disks[index].file_path; }
-    QString disk_type(int index) { return m_disks[index].driver_type; }
-    QString cdrom() { return m_cdrom; }
+    QString domain_id() { return m_domain_id; }
 
 private:
-    QString m_qemu_path;
+    QProcess *m_process;
+    uint m_ssh_listen;
+    uint m_monitor_listen;
+
+    QString m_domain_id;
+    QString m_accelerator;
+    QString m_qemu_binary_path;
     QString m_name;
     QString m_os_type;
-    VMDisk m_disks[2];
-    QString m_cdrom;
+    VMDisk m_disks[MAX_DISK_COUNT];
+    VMCdrom m_cdroms[MAX_CDROM_COUNT];
 };
 
 
 #endif // VIRTUALMACHINE_H
+
