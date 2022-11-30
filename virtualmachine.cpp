@@ -61,8 +61,14 @@ void VirtualMachine::start(QString& ssh_port, QString& monitor_port)
     qemuCommand << "-accel";
     qemuCommand << m_accelerator;
 
-    qemuCommand << "-hda";
-    qemuCommand << m_disks[0].file_path;
+    qemuCommand << "-m";
+    qemuCommand << "1024";
+
+    qemuCommand << "-drive";
+    qemuCommand << QString("media=disk,aio=threads,if=%1,format=%2,file=%3")
+                   .arg("virtio")
+                   .arg("qcow2")
+                   .arg(m_disks[0].file_path);
 
     QString program = QDir::toNativeSeparators(m_qemu_binary_path);
 

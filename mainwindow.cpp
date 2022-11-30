@@ -12,7 +12,6 @@
 #include "mainsetting.h"
 #include "virtualmachine.h"
 #include "virtualmachinedom.h"
-#include "config/global_setting.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -79,7 +78,6 @@ MainWindow::~MainWindow()
     if (config_chaned) {
         s.save_config();
     }
-
 
     delete m_bitmap;
     delete ui;
