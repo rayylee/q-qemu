@@ -1,5 +1,5 @@
-#ifndef MAINSETTING_H
-#define MAINSETTING_H
+#ifndef MAIN_SETTING_H
+#define MAIN_SETTING_H
 
 #include <QDialog>
 
@@ -13,7 +13,7 @@ class MainSetting : public QDialog
 
 public:
     explicit MainSetting(QWidget *parent = nullptr);
-    ~MainSetting();
+    ~MainSetting() override;
 
     void set_app_dir(QString);
 
@@ -33,4 +33,4 @@ private:
     QString m_qemu_binary_path;
 };
 
-#endif // MAINSETTING_H
+#endif // MAIN_SETTING_H

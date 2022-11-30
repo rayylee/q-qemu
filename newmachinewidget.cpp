@@ -1,6 +1,5 @@
 #include <QDebug>
 #include <QFile>
-#include <QDomDocument>
 #include <QFileDialog>
 #include <QStandardPaths>
 

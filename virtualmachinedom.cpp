@@ -1,9 +1,7 @@
 #include "virtualmachinedom.h"
 
 VirtualMachineDom::~VirtualMachineDom()
-{
-
-}
+= default;
 
 VirtualMachineDom::VirtualMachineDom()
 {
@@ -12,7 +10,7 @@ VirtualMachineDom::VirtualMachineDom()
     m_doc.appendChild(m_root);
 }
 
-VirtualMachineDom::VirtualMachineDom(QString xml_string)
+VirtualMachineDom::VirtualMachineDom(const QString& xml_string)
 {
     if (!m_doc.setContent(xml_string)) {
         return;
@@ -303,17 +301,17 @@ int VirtualMachineDom::get_cdrom_count()
     return count;
 }
 
-void VirtualMachineDom::set_accelerator(QString accel)
+void VirtualMachineDom::set_accelerator(const QString& accel)
 {
     m_root.setAttribute("type", accel);
 }
 
-void VirtualMachineDom::set_domain_id(QString id)
+void VirtualMachineDom::set_domain_id(const QString& id)
 {
     m_root.setAttribute("id", id);
 }
 
-void VirtualMachineDom::set_name(QString name)
+void VirtualMachineDom::set_name(const QString& name)
 {
     QDomElement name_element;
     QDomNodeList nodes = m_root.childNodes();
@@ -333,7 +331,7 @@ void VirtualMachineDom::set_name(QString name)
     }
 }
 
-void VirtualMachineDom::set_os_type(QString os_type)
+void VirtualMachineDom::set_os_type(const QString& os_type)
 {
     QDomElement os_element;
     QDomNodeList os_nodes = m_root.childNodes();
@@ -379,7 +377,7 @@ QDomElement VirtualMachineDom::_add_devices_element()
     return devices_nodes.at(0).toElement();
 }
 
-void VirtualMachineDom::set_emulator(QString emu_path)
+void VirtualMachineDom::set_emulator(const QString& emu_path)
 {
     QDomElement devices_element = _add_devices_element();
 
@@ -396,7 +394,7 @@ void VirtualMachineDom::set_emulator(QString emu_path)
     devices_element.appendChild(emulator_element);
 }
 
-void VirtualMachineDom::append_disk(QString disk_path, QString driver_type)
+void VirtualMachineDom::append_disk(const QString& disk_path, const QString& driver_type)
 {
     QDomElement devices_element = _add_devices_element();
 
@@ -417,7 +415,7 @@ void VirtualMachineDom::append_disk(QString disk_path, QString driver_type)
     devices_disk.appendChild(disk_source);
 }
 
-void VirtualMachineDom::append_cdrom(QString cdrom_path)
+void VirtualMachineDom::append_cdrom(const QString& cdrom_path)
 {
     QDomElement devices_element = _add_devices_element();
 

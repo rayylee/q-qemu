@@ -1,17 +1,13 @@
 #include <QDebug>
 #include <QFile>
 #include <QDir>
-#include <QDomDocument>
 #include <QProcess>
-#include <QTcpSocket>
 
 #include "virtualmachine.h"
 #include "virtualmachinedom.h"
 
 VirtualMachine::VirtualMachine()
-{
-
-}
+= default;
 
 VirtualMachine::VirtualMachine(const QString& xml_path)
 {   
@@ -40,9 +36,7 @@ VirtualMachine::VirtualMachine(const QString& xml_path)
 }
 
 VirtualMachine::~VirtualMachine()
-{
-
-}
+= default;
 
 void VirtualMachine::start(QString& ssh_port, QString& monitor_port)
 {
@@ -72,7 +66,7 @@ void VirtualMachine::start(QString& ssh_port, QString& monitor_port)
 
     QString program = QDir::toNativeSeparators(m_qemu_binary_path);
 
-    qDebug() << "qemu: " << m_qemu_binary_path;
+    qDebug() << "qemu: " << program;
     qDebug() << program << qemuCommand;
 
     m_process = new QProcess();

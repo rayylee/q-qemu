@@ -1,5 +1,5 @@
-#ifndef HELPDIALOG_H
-#define HELPDIALOG_H
+#ifndef HELP_DIALOG_H
+#define HELP_DIALOG_H
 
 #include <QDialog>
 
@@ -13,10 +13,10 @@ class HelpDialog : public QDialog
 
 public:
     explicit HelpDialog(QWidget *parent = nullptr);
-    ~HelpDialog();
+    ~HelpDialog() override;
 
 private:
     Ui::HelpDialog *ui;
 };
 
-#endif // HELPDIALOG_H
+#endif // HELP_DIALOG_H

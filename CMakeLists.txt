@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 3.17)
 project(q_qemu)
 
 set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_PREFIX_PATH "D:/Qt/Qt5.13.2/5.13.2/mingw73_64")
+# set(CMAKE_PREFIX_PATH "D:/Qt/Qt5.13.2/5.13.2/mingw73_64")
+set(CMAKE_PREFIX_PATH "D:/Qt/Qt5.12.11/5.12.11/mingw73_64")
 
 set(APP_RC resourse.qrc)
 
@@ -14,6 +15,7 @@ set(QT_VERSION 5)
 set(REQUIRED_LIBS Core Widgets Xml Network Gui)
 set(REQUIRED_LIBS_QUALIFIED Qt5::Core Qt5::Widgets Qt5::Xml Qt5::Network Qt5::Gui)
 
+include_directories(${PROJECT_SOURCE_DIR}/cmake-build-debug/q_qemu_autogen/include)
 include_directories(${PROJECT_SOURCE_DIR}/config)
 include_directories(${PROJECT_SOURCE_DIR})
 

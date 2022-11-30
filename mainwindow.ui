@@ -43,7 +43,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
    <property name="font">
@@ -116,7 +116,7 @@
   <action name="actionImport">
    <property name="icon">
     <iconset resource="resourse.qrc">
-     <normaloff>:/Resources/import.svg</normaloff>:/Resources/import.svg</iconset>
+     <normaloff>:/Resources/import.png</normaloff>:/Resources/import.png</iconset>
    </property>
    <property name="text">
     <string>Import</string>
@@ -125,7 +125,7 @@
   <action name="actionSetting1">
    <property name="icon">
     <iconset resource="resourse.qrc">
-     <normaloff>:/Resources/configure.svg</normaloff>:/Resources/configure.svg</iconset>
+     <normaloff>:/Resources/configure.png</normaloff>:/Resources/configure.png</iconset>
    </property>
    <property name="text">
     <string>Setting</string>
@@ -134,7 +134,7 @@
   <action name="actionExit">
    <property name="icon">
     <iconset resource="resourse.qrc">
-     <normaloff>:/Resources/application-exit.svg</normaloff>:/Resources/application-exit.svg</iconset>
+     <normaloff>:/Resources/application-exit.png</normaloff>:/Resources/application-exit.png</iconset>
    </property>
    <property name="text">
     <string>Exit</string>
@@ -161,16 +161,19 @@
   <action name="actionVMSetting">
    <property name="icon">
     <iconset resource="resourse.qrc">
-     <normaloff>:/Resources/vm_configure.svg</normaloff>:/Resources/vm_configure.svg</iconset>
+     <normaloff>:/Resources/vm_configure.png</normaloff>:/Resources/vm_configure.png</iconset>
    </property>
    <property name="text">
-    <string>setting</string>
+    <string>Setting</string>
+   </property>
+   <property name="toolTip">
+    <string>Setting</string>
    </property>
   </action>
   <action name="actionExport">
    <property name="icon">
     <iconset resource="resourse.qrc">
-     <normaloff>:/Resources/export.svg</normaloff>:/Resources/export.svg</iconset>
+     <normaloff>:/Resources/export.png</normaloff>:/Resources/export.png</iconset>
    </property>
    <property name="text">
     <string>Export</string>
@@ -179,7 +182,7 @@
   <action name="actionStart">
    <property name="icon">
     <iconset resource="resourse.qrc">
-     <normaloff>:/Resources/start.svg</normaloff>:/Resources/start.svg</iconset>
+     <normaloff>:/Resources/start.png</normaloff>:/Resources/start.png</iconset>
    </property>
    <property name="text">
     <string>Start</string>
@@ -188,7 +191,7 @@
   <action name="actionShutdown">
    <property name="icon">
     <iconset resource="resourse.qrc">
-     <normaloff>:/Resources/stop.svg</normaloff>:/Resources/stop.svg</iconset>
+     <normaloff>:/Resources/stop.png</normaloff>:/Resources/stop.png</iconset>
    </property>
    <property name="text">
     <string>Shutdown</string>
@@ -197,7 +200,7 @@
   <action name="actionPoweroff">
    <property name="icon">
     <iconset resource="resourse.qrc">
-     <normaloff>:/Resources/poweroff.svg</normaloff>:/Resources/poweroff.svg</iconset>
+     <normaloff>:/Resources/poweroff.png</normaloff>:/Resources/poweroff.png</iconset>
    </property>
    <property name="text">
     <string>Poweroff</string>

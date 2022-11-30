@@ -1,5 +1,5 @@
-#ifndef VIRTUALMACHINEDOM_H
-#define VIRTUALMACHINEDOM_H
+#ifndef VIRTUAL_MACHINE_DOM_H
+#define VIRTUAL_MACHINE_DOM_H
 
 #include <QString>
 #include <QDebug>
@@ -10,22 +10,22 @@ class VirtualMachineDom
 {
 public:
     VirtualMachineDom();
-    VirtualMachineDom(QString xml_string);
-    VirtualMachineDom(QFile& f);
+    explicit VirtualMachineDom(const QString& xml_string);
+    explicit VirtualMachineDom(QFile& f);
     ~VirtualMachineDom();
 
 private:
     QDomElement _add_devices_element();
 
 public:
-    void set_accelerator(QString);
-    void set_domain_id(QString);
-    void set_domainid(QString);
-    void set_emulator(QString);
-    void set_name(QString);
-    void set_os_type(QString);
-    void append_disk(QString, QString);
-    void append_cdrom(QString);
+    void set_accelerator(const QString&);
+    void set_domain_id(const QString&);
+
+    void set_emulator(const QString&);
+    void set_name(const QString&);
+    void set_os_type(const QString&);
+    void append_disk(const QString&, const QString&);
+    void append_cdrom(const QString&);
 
     QString get_accelerator();
     QString get_domain_id();
@@ -45,6 +45,4 @@ private:
     QDomElement m_root;
 };
 
-#endif // VIRTUALMACHINEDOM_H
-
-QString get_disk_type();
+#endif // VIRTUAL_MACHINE_DOM_H

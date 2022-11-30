@@ -2,15 +2,15 @@
     <qresource prefix="/">
         <file>Resources/new_tab.png</file>
         <file>Resources/information.png</file>
-        <file>Resources/settings-configure.svg</file>
-        <file>Resources/configure.svg</file>
-        <file>Resources/application-exit.svg</file>
-        <file>Resources/import.svg</file>
-        <file>Resources/export.svg</file>
         <file>Resources/qemu.png</file>
-        <file>Resources/poweroff.svg</file>
-        <file>Resources/start.svg</file>
-        <file>Resources/stop.svg</file>
-        <file>Resources/vm_configure.svg</file>
+        <file>Resources/configure.png</file>
+        <file>Resources/application-exit.png</file>
+        <file>Resources/export.png</file>
+        <file>Resources/import.png</file>
+        <file>Resources/poweroff.png</file>
+        <file>Resources/settings-configure.png</file>
+        <file>Resources/start.png</file>
+        <file>Resources/stop.png</file>
+        <file>Resources/vm_configure.png</file>
     </qresource>
 </RCC>

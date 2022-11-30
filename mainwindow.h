@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef MAIN_WINDOW_H
+#define MAIN_WINDOW_H
 
 #include <QMainWindow>
 #include "config/global_setting.h"
@@ -13,14 +13,14 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    explicit MainWindow(QWidget *parent = nullptr);
+    ~MainWindow() override;
 
 private:
     void _new_machine_wizard();
     void _main_setting();
-    void _delete_vm(QString);
-    QString _get_curvm_xml_path();
+    void _delete_vm(const QString&);
+    QString _get_current_vm_xml_path();
     void _cmd_qmp(QString&);
 
 private slots:
@@ -30,7 +30,7 @@ private slots:
 
     void recv_qemu_dir(QString, QString);
 
-    void recv_new_machine(QString);
+    void recv_new_machine(const QString&);
 
     void on_actionAbout_triggered();
 
@@ -42,7 +42,7 @@ private slots:
 
     void on_actionSetting1_triggered();
 
-    void on_actionVMSetting_triggered();
+    static void on_actionVMSetting_triggered();
 
     void on_vmlistWidget_customContextMenuRequested(const QPoint &pos);
 
@@ -60,4 +60,4 @@ private:
     QString m_monitor_port;
     QString m_ssh_port;
 };
-#endif // MAINWINDOW_H
+#endif // MAIN_WINDOW_H

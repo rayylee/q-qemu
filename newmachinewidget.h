@@ -1,7 +1,8 @@
-#ifndef NEWMACHINEWIDGET_H
-#define NEWMACHINEWIDGET_H
+#ifndef NEW_MACHINE_WIDGET_H
+#define NEW_MACHINE_WIDGET_H
 
 #include <QWizard>
+#include <utility>
 
 namespace Ui {
 class NewMachineWidget;
@@ -13,11 +14,11 @@ class NewMachineWidget : public QWizard
 
 public:
     explicit NewMachineWidget(QWidget *parent = nullptr);
-    ~NewMachineWidget();    
+    ~NewMachineWidget() override;
 
 public:
-    void set_qemu_binary_path(QString in) { m_qemu_binary_path = in; }
-    void set_app_dir(QString in) { m_app_dir = in; }
+    void set_qemu_binary_path(QString in) { m_qemu_binary_path = std::move(in); }
+    void set_app_dir(QString in) { m_app_dir = std::move(in); }
     void set_domain_id(int in) { m_domain_id = in; }
 
 signals:
@@ -37,7 +38,7 @@ private:
 
     QString m_qemu_binary_path;
     QString m_app_dir;
-    int m_domain_id;
+    int m_domain_id{};
 };
 
-#endif // NEWMACHINEWIDGET_H
+#endif // NEW_MACHINE_WIDGET_H

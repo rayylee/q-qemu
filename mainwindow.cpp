@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QDirIterator>
 #include <QMessageBox>
+#include <utility>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -52,7 +53,7 @@ MainWindow::MainWindow(QWidget *parent)
         s.search_qemu_binary();
         s.save_config();
     }
-    m_qemu_binary_path = s.qemu_binary_path();
+    m_qemu_binary_path = s.qemu_binary_path();    
     m_bitmap = new BitMap(s.bitmap_string());
     m_ssh_port = s.ssh_port();
     m_monitor_port = s.monitor_port();
@@ -62,20 +63,20 @@ MainWindow::~MainWindow()
 {
     GlobalSetting s = GlobalSetting(m_app_dir);
     QString bitmap_string = m_bitmap->to_string();
-    bool config_chaned = false;
+    bool config_changed = false;
     if (s.bitmap_string().compare(bitmap_string)) {
-        s.set_bitmap_string(bitmap_string);        
-        config_chaned = true;
+        s.set_bitmap_string(bitmap_string);
+        config_changed = true;
     }    
     if (s.ssh_port().compare(m_ssh_port)) {
         s.set_ssh_port(m_ssh_port);
-        config_chaned = true;
+        config_changed = true;
     }
     if (s.monitor_port().compare(m_monitor_port)) {
         s.set_monitor_port(m_monitor_port);
-        config_chaned = true;
+        config_changed = true;
     }
-    if (config_chaned) {
+    if (config_changed) {
         s.save_config();
     }
 
@@ -85,14 +86,14 @@ MainWindow::~MainWindow()
 
 void MainWindow::_new_machine_wizard()
 {
-    NewMachineWidget *w = new NewMachineWidget();
+    auto *w = new NewMachineWidget();
 
     w->setWindowModality(Qt::ApplicationModal);
 
-    int domin_id = m_bitmap->get_first_zero() + 1;
-    qDebug() << "New domain id:" << domin_id;
-    if (domin_id > 0) {
-        w->set_domain_id(domin_id);
+    int domain_id = m_bitmap->get_first_zero() + 1;
+    qDebug() << "New domain id:" << domain_id;
+    if (domain_id > 0) {
+        w->set_domain_id(domain_id);
     }
     w->set_app_dir(m_app_dir);
     w->set_qemu_binary_path(m_qemu_binary_path);
@@ -104,22 +105,22 @@ void MainWindow::_new_machine_wizard()
     delete w;
 }
 
-void MainWindow::recv_new_machine(QString vm_name)
+void MainWindow::recv_new_machine(const QString& vm_name)
 {
     ui->vmlistWidget->addItem(vm_name);
-    int domin_id = m_bitmap->get_first_zero() + 1;
-    m_bitmap->set(domin_id - 1);
+    int domain_id = m_bitmap->get_first_zero() + 1;
+    m_bitmap->set(domain_id - 1);
 }
 
 void MainWindow::recv_qemu_dir(QString qemu_dir, QString qemu_binary_path)
 {
-    m_qemu_dir = qemu_dir;
-    m_qemu_binary_path = qemu_binary_path;
+    m_qemu_dir = std::move(qemu_dir);
+    m_qemu_binary_path = std::move(qemu_binary_path);
 }
 
 void MainWindow::on_actionAbout_triggered()
 {
-    HelpDialog *dialog = new HelpDialog();
+    auto *dialog = new HelpDialog();
 
     dialog->setWindowModality(Qt::ApplicationModal);
 
@@ -136,7 +137,7 @@ void MainWindow::on_actionNew2_triggered()
     _new_machine_wizard();
 }
 
-QString MainWindow::_get_curvm_xml_path()
+QString MainWindow::_get_current_vm_xml_path()
 {
     QList<QListWidgetItem*> items = ui->vmlistWidget->selectedItems();
     if (items.isEmpty()) {
@@ -156,7 +157,7 @@ QString MainWindow::_get_curvm_xml_path()
 
 void MainWindow::_main_setting()
 {
-    MainSetting *w = new MainSetting();
+    auto *w = new MainSetting();
 
     w->set_app_dir(m_app_dir);
     w->setWindowModality(Qt::ApplicationModal);
@@ -181,8 +182,8 @@ void MainWindow::on_vmlistWidget_customContextMenuRequested(const QPoint &pos)
 {
     QListWidgetItem* curItem = ui->vmlistWidget->itemAt(pos);
     if(!curItem) {
-        QMenu *blank_menu = new QMenu(this);
-        QAction *refresh_action = new QAction(tr("Refresh"), this);
+        auto *blank_menu = new QMenu(this);
+        auto *refresh_action = new QAction(tr("Refresh"), this);
 
         blank_menu->addAction(refresh_action);
 
@@ -196,8 +197,8 @@ void MainWindow::on_vmlistWidget_customContextMenuRequested(const QPoint &pos)
         return;
     }
 
-    QMenu *item_menu = new QMenu(this);
-    QAction *delete_vm = new QAction(tr("Delete"), this);
+    auto *item_menu = new QMenu(this);
+    auto *delete_vm = new QAction(tr("Delete"), this);
 
     item_menu->addAction(delete_vm);
 
@@ -248,7 +249,7 @@ void MainWindow::recv_refresh_vm()
     }
 }
 
-void MainWindow::_delete_vm(QString vm_name)
+void MainWindow::_delete_vm(const QString& vm_name)
 {
     QListWidgetItem *item = nullptr;
 
@@ -314,7 +315,7 @@ void MainWindow::recv_delete_vm()
 
 void MainWindow::on_actionStart_triggered()
 {
-    QString xml_path = _get_curvm_xml_path();
+    QString xml_path = _get_current_vm_xml_path();
 
     if (xml_path.length() <= 0) {
         return;
@@ -327,7 +328,7 @@ void MainWindow::on_actionStart_triggered()
 
 void MainWindow::_cmd_qmp(QString& cmd)
 {
-    QString xml_path = _get_curvm_xml_path();
+    QString xml_path = _get_current_vm_xml_path();
     if (xml_path.length() <= 0) {
         return;
     }
@@ -337,7 +338,7 @@ void MainWindow::_cmd_qmp(QString& cmd)
     uint16_t monitor_listen = vm.domain_id().toUShort()
              + m_monitor_port.toUShort() - 1;
 
-    QTcpSocket *monitor_socket = new QTcpSocket();
+    auto *monitor_socket = new QTcpSocket();
     monitor_socket->connectToHost("localhost",
                                     monitor_listen,
                                     QIODevice::ReadWrite);

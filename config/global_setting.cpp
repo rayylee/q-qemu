@@ -5,7 +5,7 @@
 
 #include "global_setting.h"
 
-GlobalSetting::GlobalSetting(QString app_dir)
+GlobalSetting::GlobalSetting(const QString& app_dir)
 {
     QDir dir_app(app_dir);
 
@@ -39,9 +39,7 @@ GlobalSetting::GlobalSetting(QString app_dir)
 }
 
 GlobalSetting::~GlobalSetting()
-{
-
-}
+= default;
 
 void GlobalSetting::search_qemu_binary()
 {

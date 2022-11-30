@@ -1,6 +1,7 @@
 #include <QFileDialog>
 #include <QDirIterator>
 #include <QDebug>
+#include <utility>
 
 #include "mainsetting.h"
 #include "ui_mainsetting.h"
@@ -20,7 +21,7 @@ MainSetting::~MainSetting()
 
 void MainSetting::set_app_dir(QString app_dir)
 {  
-    m_app_dir = app_dir;
+    m_app_dir = std::move(app_dir);
 
     GlobalSetting s = GlobalSetting(m_app_dir);
     m_qemu_dir = s.qemu_dir();

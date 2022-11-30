@@ -1,23 +1,24 @@
-#ifndef GLOBALSETTING_H
-#define GLOBALSETTING_H
+#ifndef GLOBAL_SETTING_H
+#define GLOBAL_SETTING_H
 
 #include <QString>
 #include <QDebug>
 #include <QDir>
+#include <utility>
 
 class GlobalSetting
 {
 public:
-    GlobalSetting(QString app_dir);
+    explicit GlobalSetting(const QString& app_dir);
     ~GlobalSetting();
 
 public:
     void save_config();
 
-    void set_qemu_dir(QString in) { m_qemu_dir = in; }
-    void set_bitmap_string(QString in) { m_bitmap_string = in; }
-    void set_monitor_port(QString in) { m_monitor_port = in; }
-    void set_ssh_port(QString in) { m_ssh_port = in; }
+    void set_qemu_dir(QString in) { m_qemu_dir = std::move(in); }
+    void set_bitmap_string(QString in) { m_bitmap_string = std::move(in); }
+    void set_monitor_port(QString in) { m_monitor_port = std::move(in); }
+    void set_ssh_port(QString in) { m_ssh_port = std::move(in); }
     void search_qemu_binary();    
 
     QString qemu_dir() {
@@ -71,10 +72,9 @@ private:
 class BitMap
 {
 public:
-    BitMap(const uint range = 0) {
-        if (m_bits != nullptr) {
-            delete[] m_bits;
-        }
+    explicit BitMap(const uint range = 0) {
+        delete[] m_bits;
+
         m_count = range;
         if (m_count > 0) {
             m_count -= 1;
@@ -85,11 +85,10 @@ public:
         clear_all();
     }
 
-    BitMap(const QString s) {
-        if (m_bits != nullptr) {
-            delete[] m_bits;
-        }
-        m_count = static_cast<uint>(s.length());
+    explicit BitMap(const QString& s) {
+        delete[] m_bits;
+
+        m_count = static_cast<int>(s.length());
         if (m_count > 0) {
             m_count -= 1;
         }
@@ -120,7 +119,7 @@ public:
         delete[] m_bits;
     }
 
-    QString to_string() {
+    QString to_string() const {
         QString s;
         for (int i = 0; i < m_size; i++) {
             for (int j = 0; j < 32; j++) {
@@ -134,31 +133,31 @@ public:
         return s;
     }
 
-    void clear_all() {
+    void clear_all() const {
         for (int i = 0; i < static_cast<int>(m_size); i++) {
             m_bits[i] = 0;
         }
     }
 
-    void set(const int& num) {
+    void set(const int& num) const {
         int index = num / 32;
         uint bit_index = num % 32;
         m_bits[index] |= 1 << bit_index;
     }
 
-    void clear(const int& num){
+    void clear(const int& num) const{
         int index = num / 32;
         uint bit_index = num % 32;
         m_bits[index] &= ~(1 << bit_index);
     }
 
-    bool get(const int& num) {
+    bool get(const int& num) const {
         int index = num / 32;
         uint bit_index = num % 32;
         return (m_bits[index] >> bit_index) & 1;
     }
 
-    int get_first_zero()
+    int get_first_zero() const
     {
         int i = 0;
         int j = 0;
@@ -175,7 +174,7 @@ public:
 public:
     uint *m_bits = nullptr;
     int m_size;
-    uint m_count;
+    int m_count;
 };
 
-#endif
+#endif // GLOBAL_SETTING_H
