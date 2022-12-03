@@ -12,7 +12,7 @@ VirtualMachine::VirtualMachine()
 VirtualMachine::VirtualMachine(const QString& xml_path)
 {
     m_ssh_listen = 0;
-    m_monitor_listen = 0;
+    m_vnc_listen = 0;
 
     QFile file(xml_path);
     if (!file.open(QIODevice::ReadOnly)) {
@@ -49,12 +49,12 @@ VirtualMachine::VirtualMachine(const QString& xml_path)
 VirtualMachine::~VirtualMachine()
 = default;
 
-void VirtualMachine::start(const QString& ssh_port, const QString& monitor_port)
+void VirtualMachine::start(const QString& ssh_port, const QString& vnc_port)
 {
     QStringList qemuCommand;
 
     m_ssh_listen = ssh_port.toUInt() + m_domain_id.toUInt() - 1;
-    m_monitor_listen = monitor_port.toUInt() + m_domain_id.toUInt() - 1;
+    m_vnc_listen = vnc_port.toUInt() + m_domain_id.toUInt() - 1;
 
     // a,b: floppy disk
     // c  : hard disk
@@ -75,9 +75,6 @@ void VirtualMachine::start(const QString& ssh_port, const QString& monitor_port)
         qemuCommand << QString("order=%1").arg(order);
     }
 
-    // qemuCommand << "-monitor"
-    //             << QString("tcp:localhost:%1,server,nowait")
-    //                .arg(m_monitor_listen);
     qemuCommand << "-monitor";
     qemuCommand << "stdio";
 
@@ -132,9 +129,9 @@ void VirtualMachine::start(const QString& ssh_port, const QString& monitor_port)
     qemuCommand << QString("user,hostfwd=tcp::%1-:22")
                    .arg(m_ssh_listen);
 
-    qemuCommand << "-display";
-    qemuCommand << "gtk";
-    // qemuCommand << "-vnc";
+     qemuCommand << "-vnc";
+     qemuCommand << QString(":%1").
+                    arg(m_vnc_listen - vnc_port.toUInt());
 
     QString program = QDir::toNativeSeparators(m_qemu_binary_path);
 
@@ -164,6 +161,7 @@ void VirtualMachine::recv_process_changed(QProcess::ProcessState state)
         case QProcess::NotRunning:
             m_state = VMState(VMState::StateShutdown);
             m_ssh_listen = 0;
+            m_vnc_listen = 0;
             break;
     }
 

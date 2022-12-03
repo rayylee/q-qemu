@@ -18,7 +18,7 @@ public:
     void set_qemu_dir(QString in) { m_qemu_dir = std::move(in); }
     void set_qemu_binary(QString in) { m_qemu_binary_path = std::move(in); }
     void set_bitmap_string(QString in) { m_bitmap_string = std::move(in); }
-    void set_monitor_port(QString in) { m_monitor_port = std::move(in); }
+    void set_vnc_port(QString in) { m_vnc_port = std::move(in); }
     void set_ssh_port(QString in) { m_ssh_port = std::move(in); }
     void search_qemu_binary();    
 
@@ -44,11 +44,11 @@ public:
         return m_qemu_binary_path;
     }
 
-    QString monitor_port() {
-        if (m_monitor_port.length() <= 0){
-            m_monitor_port = QString("6000");
+    QString vnc_port() {
+        if (m_vnc_port.length() <= 0){
+            m_vnc_port = QString("6000");
         }
-        return m_monitor_port;
+        return m_vnc_port;
     }
 
     QString ssh_port() {
@@ -66,7 +66,7 @@ private:
     QString m_qemu_dir;
     QString m_qemu_binary_path;
     QString m_bitmap_string;
-    QString m_monitor_port;
+    QString m_vnc_port;
     QString m_ssh_port;
 };
 

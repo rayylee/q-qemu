@@ -69,7 +69,7 @@ public:
     explicit VirtualMachine(const QString&);
     ~VirtualMachine() override;
 
-    void start(const QString& ssh_port, const QString& monitor_port);
+    void start(const QString& ssh_port, const QString& vnc_port);
     void stop();
 
     QString to_xml_string();
@@ -101,6 +101,7 @@ public:
 
     QString name() { return m_name; }
     uint ssh_listen_port() { return m_ssh_listen; }
+    uint vnc_listen_port() { return m_vnc_listen; }
     QString cpu_sockets() { return m_cpu_sockets; }
     QString cpu_cores() { return m_cpu_cores; }
     QString cpu_threads() { return m_cpu_threads; }
@@ -131,7 +132,7 @@ private:
     QProcess *m_process = nullptr;
     VMState m_state;
     uint m_ssh_listen;
-    uint m_monitor_listen;
+    uint m_vnc_listen;
 
     QString m_domain_id;
     QString m_accelerator;

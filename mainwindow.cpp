@@ -8,8 +8,6 @@
 #include <QMessageBox>
 #include <utility>
 
-#include <Windows.h>
-
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "helpdialog.h"
@@ -311,7 +309,7 @@ void MainWindow::on_actionStart_triggered()
     auto vm = m_vm_map.value((items.at(0)->text()));
 
     vm->start(m_global_setting->ssh_port(),
-             m_global_setting->monitor_port());
+             m_global_setting->vnc_port());
 
 }
 
@@ -324,26 +322,9 @@ void MainWindow::_cmd_qmp(QString& cmd)
 
     auto vm = m_vm_map.value((items.at(0)->text()));
 
-    uint16_t monitor_listen = vm->domain_id().toUShort() +
-            m_global_setting->monitor_port().toUShort() - 1;
-
     const char *data = qPrintable(QString("%1\n").arg(cmd));
-    vm->process_write(data, static_cast<qint64>(strlen(data)));
-    return;
-
-    auto *monitor_socket = new QTcpSocket();
-    monitor_socket->connectToHost("localhost",
-                                    monitor_listen,
-                                    QIODevice::ReadWrite);    
-
-    monitor_socket->waitForConnected(100);
-
-    if (monitor_socket->state() == QAbstractSocket::ConnectedState) {
-        monitor_socket->write(qPrintable(QString("%1\n").arg(cmd)));
-    } else {
-        qCritical() << "Error: connect"
-                    << monitor_listen
-                    << monitor_socket->state();
+    if (vm->process_write(data, static_cast<qint64>(strlen(data))) != strlen(data) ) {
+        qCritical("Error: process write");
     }
 }
 
@@ -373,6 +354,14 @@ void MainWindow::on_vmlistWidget_currentRowChanged(int currentRow)
                                     arg(vm->ssh_listen_port()));
     } else {
         ui->vmSshPortLabel->setText("-");
+    }
+
+    auto vnc_port = vm->vnc_listen_port();
+    if (vnc_port > 0) {
+        ui->vmVncPortLabel->setText(QString("%1").
+                                    arg(vm->vnc_listen_port()));
+    } else {
+        ui->vmVncPortLabel->setText("-");
     }
 
     ui->vmAcceleratorLabel->setText(vm->accelerator());
@@ -450,17 +439,12 @@ void MainWindow::recv_refresh_vm_state(const QString& name)
             ui->vmSshPortLabel->setText("-");
         }
 
-        auto pid = vm->process_id();
-        if (pid != 0) {
-            WId wid = (WId)FindWindow(NULL, L"QEMU (testvm1_1)");
-            // AttachWinThreadKeyMouseEvent(wid);
-
-            QWindow* window = QWindow::fromWinId(wid);
-            QWidget* widget = QWidget::createWindowContainer(
-                        window, ui->consoleWidget, Qt::Widget);
-
-            // widget->setParent(ui->consoleWidget->window());
-            // widget->show();
+        auto vnc_port = vm->vnc_listen_port();
+        if (vnc_port > 0) {
+            ui->vmVncPortLabel->setText(QString("%1").
+                                        arg(vm->vnc_listen_port()));
+        } else {
+            ui->vmVncPortLabel->setText("-");
         }
     }
 }
