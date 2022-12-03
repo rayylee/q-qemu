@@ -8,9 +8,11 @@
         <file>Resources/export.png</file>
         <file>Resources/import.png</file>
         <file>Resources/poweroff.png</file>
-        <file>Resources/settings-configure.png</file>
         <file>Resources/start.png</file>
-        <file>Resources/stop.png</file>
         <file>Resources/vm_configure.png</file>
+        <file>Resources/shutdown.png</file>
+        <file>Resources/start_flag.png</file>
+        <file>Resources/settings_configure.png</file>
+        <file>Resources/shutdown_flag.png</file>
     </qresource>
 </RCC>

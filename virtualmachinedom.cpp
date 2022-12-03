@@ -5,8 +5,7 @@ VirtualMachineDom::~VirtualMachineDom()
 
 VirtualMachineDom::VirtualMachineDom()
 {
-    m_root = m_doc.createElement("domain");
-    m_root.setAttribute("type", "tcg");
+    m_root = m_doc.createElement("domain");    
     m_doc.appendChild(m_root);
 }
 
@@ -81,6 +80,109 @@ QString VirtualMachineDom::get_name()
             name_element = os_nodes.at(i).toElement();
             return name_element.firstChild().nodeValue();
         }
+    }
+
+    return QString("");
+}
+
+QString VirtualMachineDom::get_current_memory()
+{
+    QDomElement cur_mem_element;
+    QDomNodeList os_nodes = m_root.childNodes();
+    for(int i = 0; i < os_nodes.count(); i++) {
+        QDomNode node = os_nodes.at(i);
+        if (!node.nodeName().compare("currentMemory")) {
+            cur_mem_element = os_nodes.at(i).toElement();
+            return cur_mem_element.firstChild().nodeValue();
+        }
+    }
+
+    return QString("");
+}
+
+QString VirtualMachineDom::get_cpu_sockets()
+{
+    QDomElement cpu_element;
+    QDomNodeList root_childs = m_root.childNodes();
+    for(int i = 0; i < root_childs.count(); i++) {
+        QDomNode node = root_childs.at(i);
+        if (!node.nodeName().compare("cpu")) {
+            cpu_element = root_childs.at(i).toElement();
+        }
+    }
+
+    QDomElement topology_element;
+    if (!cpu_element.isNull()) {
+        QDomNodeList cpu_childs = cpu_element.childNodes();
+        for(int i = 0; i < cpu_childs.count(); i++) {
+            QDomNode node = cpu_childs.at(i);
+            if (!node.nodeName().compare("topology")) {
+                topology_element = cpu_childs.at(i).toElement();
+            }
+        }
+    }
+
+    if (!topology_element.isNull()) {
+        return topology_element.attribute("sockets");
+    }
+
+    return QString("");
+}
+
+QString VirtualMachineDom::get_cpu_cores()
+{
+    QDomElement cpu_element;
+    QDomNodeList root_childs = m_root.childNodes();
+    for(int i = 0; i < root_childs.count(); i++) {
+        QDomNode node = root_childs.at(i);
+        if (!node.nodeName().compare("cpu")) {
+            cpu_element = root_childs.at(i).toElement();
+        }
+    }
+
+    QDomElement topology_element;
+    if (!cpu_element.isNull()) {
+        QDomNodeList cpu_childs = cpu_element.childNodes();
+        for(int i = 0; i < cpu_childs.count(); i++) {
+            QDomNode node = cpu_childs.at(i);
+            if (!node.nodeName().compare("topology")) {
+                topology_element = cpu_childs.at(i).toElement();
+            }
+        }
+    }
+
+    if (!topology_element.isNull()) {
+        return topology_element.attribute("cores");
+    }
+
+    return QString("");
+}
+
+
+QString VirtualMachineDom::get_cpu_threads()
+{
+    QDomElement cpu_element;
+    QDomNodeList root_childs = m_root.childNodes();
+    for(int i = 0; i < root_childs.count(); i++) {
+        QDomNode node = root_childs.at(i);
+        if (!node.nodeName().compare("cpu")) {
+            cpu_element = root_childs.at(i).toElement();
+        }
+    }
+
+    QDomElement topology_element;
+    if (!cpu_element.isNull()) {
+        QDomNodeList cpu_childs = cpu_element.childNodes();
+        for(int i = 0; i < cpu_childs.count(); i++) {
+            QDomNode node = cpu_childs.at(i);
+            if (!node.nodeName().compare("topology")) {
+                topology_element = cpu_childs.at(i).toElement();
+            }
+        }
+    }
+
+    if (!topology_element.isNull()) {
+        return topology_element.attribute("threads");
     }
 
     return QString("");
@@ -241,6 +343,37 @@ QString VirtualMachineDom::get_cdrom_file(int index)
     return QString("");
 }
 
+QStringList VirtualMachineDom::get_boot_order()
+{
+    QStringList orders;
+
+    QDomElement os_element;
+    QDomNodeList os_nodes = m_root.childNodes();
+    for(int i = 0; i < os_nodes.count(); i++) {
+        QDomNode node = os_nodes.at(i);
+        if (node.nodeName() == "os") {
+            os_element = os_nodes.at(i).toElement();
+            break;
+        }
+    }
+    if (os_element.isNull()) {
+        os_element = m_doc.createElement("os");
+        m_root.appendChild(os_element);
+    }
+
+    QDomElement boot_element;
+    QDomNodeList boot_nodes = os_element.childNodes();
+
+    for (int i = 0; i < boot_nodes.count(); i++) {
+        QDomNode node = boot_nodes.at(i);
+        if (node.nodeName() == "boot") {
+            orders.append(node.toElement().attribute("dev"));
+        }
+    }
+
+    return orders;
+}
+
 int VirtualMachineDom::get_disk_count()
 {
     int count = 0;
@@ -331,6 +464,95 @@ void VirtualMachineDom::set_name(const QString& name)
     }
 }
 
+void VirtualMachineDom::set_current_memory(const QString& memory)
+{
+    QDomElement cur_mem_element;
+    QDomNodeList nodes = m_root.childNodes();
+    for(int i = 0; i < nodes.count(); i++) {
+        QDomNode node = nodes.at(i);
+        if (!node.nodeName().compare("currentMemory")) {
+            cur_mem_element = nodes.at(i).toElement();
+            break;
+        }
+    }
+    if (cur_mem_element.isNull()) {
+        cur_mem_element = m_doc.createElement("currentMemory");
+        cur_mem_element.setAttribute("unit", "MiB");
+        cur_mem_element.appendChild(m_doc.createTextNode(memory));
+        m_root.appendChild(cur_mem_element);
+    } else {
+        cur_mem_element.firstChild().setNodeValue(memory);
+    }
+}
+
+void VirtualMachineDom::set_cpu_sockets(const QString& sockets)
+{
+    QDomElement cpu_element = _add_cpu_element();
+
+    QDomElement topology_element;
+    QDomNodeList cpu_childs = cpu_element.childNodes();
+    for(int i = 0; i < cpu_childs.count(); i++) {
+        QDomNode node = cpu_childs.at(i);
+        if (node.nodeName() == "topology") {
+            topology_element = cpu_childs.at(i).toElement();
+            break;
+        }
+    }
+
+    if (topology_element.isNull()) {
+        topology_element = m_doc.createElement("topology");
+        cpu_element.appendChild(topology_element);
+    }
+
+    topology_element.setAttribute("sockets", sockets);
+}
+
+
+void VirtualMachineDom::set_cpu_cores(const QString& cores)
+{
+    QDomElement cpu_element = _add_cpu_element();
+
+    QDomElement topology_element;
+    QDomNodeList cpu_childs = cpu_element.childNodes();
+    for(int i = 0; i < cpu_childs.count(); i++) {
+        QDomNode node = cpu_childs.at(i);
+        if (node.nodeName() == "topology") {
+            topology_element = cpu_childs.at(i).toElement();
+            break;
+        }
+    }
+
+    if (topology_element.isNull()) {
+        topology_element = m_doc.createElement("topology");
+        cpu_element.appendChild(topology_element);
+    }
+
+    topology_element.setAttribute("cores", cores);
+}
+
+
+void VirtualMachineDom::set_cpu_threads(const QString& threads)
+{
+    QDomElement cpu_element = _add_cpu_element();
+
+    QDomElement topology_element;
+    QDomNodeList cpu_childs = cpu_element.childNodes();
+    for(int i = 0; i < cpu_childs.count(); i++) {
+        QDomNode node = cpu_childs.at(i);
+        if (node.nodeName() == "topology") {
+            topology_element = cpu_childs.at(i).toElement();
+            break;
+        }
+    }
+
+    if (topology_element.isNull()) {
+        topology_element = m_doc.createElement("topology");
+        cpu_element.appendChild(topology_element);
+    }
+
+    topology_element.setAttribute("threads", threads);
+}
+
 void VirtualMachineDom::set_os_type(const QString& os_type)
 {
     QDomElement os_element;
@@ -370,6 +592,18 @@ QDomElement VirtualMachineDom::_add_devices_element()
     QDomNodeList devices_nodes = m_root.elementsByTagName("devices");
     if (devices_nodes.length() <= 0) {
         QDomElement devices_element = m_doc.createElement("devices");
+        m_root.appendChild(devices_element);
+        return devices_element;
+    }
+
+    return devices_nodes.at(0).toElement();
+}
+
+QDomElement VirtualMachineDom::_add_cpu_element()
+{
+    QDomNodeList devices_nodes = m_root.elementsByTagName("cpu");
+    if (devices_nodes.length() <= 0) {
+        QDomElement devices_element = m_doc.createElement("cpu");
         m_root.appendChild(devices_element);
         return devices_element;
     }
@@ -429,6 +663,39 @@ void VirtualMachineDom::append_cdrom(const QString& cdrom_path)
     QDomElement disk_source = m_doc.createElement("source");
     disk_source.setAttribute("file", cdrom_path);
     devices_cdrom.appendChild(disk_source);
+}
+
+void VirtualMachineDom::set_boot_order(QStringList orders)
+{
+    QDomElement os_element;
+    QDomNodeList os_nodes = m_root.childNodes();
+    for(int i = 0; i < os_nodes.count(); i++) {
+        QDomNode node = os_nodes.at(i);
+        if (node.nodeName() == "os") {
+            os_element = os_nodes.at(i).toElement();
+            break;
+        }
+    }
+    if (os_element.isNull()) {
+        os_element = m_doc.createElement("os");
+        m_root.appendChild(os_element);
+    }
+
+    QDomElement boot_element;
+    QDomNodeList boot_nodes = os_element.childNodes();
+
+    for (int i = 0; i < boot_nodes.count(); i++) {
+        QDomNode node = boot_nodes.at(i);
+        if (node.nodeName() == "boot") {
+            os_element.removeChild(node);
+        }
+    }
+
+    for (auto &order : orders) {
+        boot_element = m_doc.createElement("boot");
+        boot_element.setAttribute("dev", order);
+        os_element.appendChild(boot_element);
+    }
 }
 
 QString VirtualMachineDom::to_xml_string()

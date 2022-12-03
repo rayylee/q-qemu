@@ -33,6 +33,10 @@ private slots:
 
     void on_choseCdromButton_clicked();
 
+    void on_bootOrderUpButton_clicked();
+
+    void on_bootOrderDownButton_clicked();
+
 private:
     Ui::NewMachineWidget *ui;
 

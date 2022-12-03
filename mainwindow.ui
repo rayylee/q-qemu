@@ -22,7 +22,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <layout class="QHBoxLayout" name="horizontalLayout" stretch="2,8">
+     <layout class="QHBoxLayout" name="hLayout1" stretch="2,8">
       <item>
        <widget class="QListWidget" name="vmlistWidget">
         <property name="contextMenuPolicy">
@@ -31,7 +31,365 @@
        </widget>
       </item>
       <item>
-       <widget class="QTextBrowser" name="textBrowser"/>
+       <widget class="QTabWidget" name="tabWidget">
+        <property name="currentIndex">
+         <number>1</number>
+        </property>
+        <widget class="QWidget" name="homeTab">
+         <attribute name="title">
+          <string>Home</string>
+         </attribute>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
+           <layout class="QVBoxLayout" name="vLayout2">
+            <item>
+             <layout class="QHBoxLayout" name="hLayout3_1" stretch="1,2,7">
+              <item>
+               <widget class="QLabel" name="label3_1">
+                <property name="text">
+                 <string>Name:</string>
+                </property>
+                <property name="textInteractionFlags">
+                 <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="vmNameLabel">
+                <property name="text">
+                 <string>-</string>
+                </property>
+                <property name="textInteractionFlags">
+                 <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer3_1">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="hLayout3_2" stretch="1,2,7">
+              <item>
+               <widget class="QLabel" name="label3_2">
+                <property name="text">
+                 <string>State:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="vmStateLabel">
+                <property name="text">
+                 <string>-</string>
+                </property>
+                <property name="textInteractionFlags">
+                 <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer3_2">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="hLayout3_6" stretch="1,2,7">
+              <item>
+               <widget class="QLabel" name="label3_9">
+                <property name="text">
+                 <string>SSH Port:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="vmSshPortLabel">
+                <property name="text">
+                 <string>-</string>
+                </property>
+                <property name="textInteractionFlags">
+                 <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_4">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="hLayout3_5" stretch="1,2,7">
+              <item>
+               <widget class="QLabel" name="label3_5">
+                <property name="text">
+                 <string>Accelerator:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="vmAcceleratorLabel">
+                <property name="text">
+                 <string>-</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer3_5">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="hLayout3_3" stretch="1,3,6">
+              <item>
+               <widget class="QLabel" name="label3_3_1">
+                <property name="text">
+                 <string>CPU:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="vmCpuLabel">
+                <property name="text">
+                 <string>-</string>
+                </property>
+                <property name="textInteractionFlags">
+                 <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer3_3">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="hLayout3_4" stretch="1,2,7">
+              <item>
+               <widget class="QLabel" name="label3_4_1">
+                <property name="text">
+                 <string>Memory(M):</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="vmCurrentMemoryLabel">
+                <property name="text">
+                 <string>-</string>
+                </property>
+                <property name="textInteractionFlags">
+                 <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="diskGroupBox">
+              <property name="title">
+               <string>Disks:</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_2">
+               <item row="0" column="0">
+                <layout class="QVBoxLayout" name="verticalLayout_2">
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout3_6" stretch="1,8,1">
+                   <item>
+                    <widget class="QLabel" name="label3_6">
+                     <property name="text">
+                      <string>Hard Disk1:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="vmHD1LineEdit">
+                     <property name="alignment">
+                      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="dragEnabled">
+                      <bool>false</bool>
+                     </property>
+                     <property name="readOnly">
+                      <bool>false</bool>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer3_6">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout3_7" stretch="1,8,1">
+                   <item>
+                    <widget class="QLabel" name="label3_7">
+                     <property name="text">
+                      <string>Hard Disk2:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="vmHD2LineEdit">
+                     <property name="readOnly">
+                      <bool>false</bool>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_2">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout3_8" stretch="1,8,1">
+                   <item>
+                    <widget class="QLabel" name="label3_8">
+                     <property name="text">
+                      <string>CD Rom:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="vmCDRomLineEdit">
+                     <property name="readOnly">
+                      <bool>false</bool>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_3">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="consoleTab">
+         <attribute name="title">
+          <string>Console</string>
+         </attribute>
+         <layout class="QGridLayout" name="gridLayout_4">
+          <item row="0" column="0">
+           <layout class="QVBoxLayout" name="vLayoutConsole">
+            <item>
+             <widget class="QWidget" name="consoleWidget" native="true"/>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </widget>
       </item>
      </layout>
     </item>
@@ -43,7 +401,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="font">
@@ -62,8 +420,6 @@
      <string>File</string>
     </property>
     <addaction name="actionNew1"/>
-    <addaction name="actionImport"/>
-    <addaction name="actionExport"/>
     <addaction name="actionSetting1"/>
     <addaction name="actionExit"/>
    </widget>
@@ -111,15 +467,6 @@
    </property>
    <property name="text">
     <string>New</string>
-   </property>
-  </action>
-  <action name="actionImport">
-   <property name="icon">
-    <iconset resource="resourse.qrc">
-     <normaloff>:/Resources/import.png</normaloff>:/Resources/import.png</iconset>
-   </property>
-   <property name="text">
-    <string>Import</string>
    </property>
   </action>
   <action name="actionSetting1">
@@ -170,15 +517,6 @@
     <string>Setting</string>
    </property>
   </action>
-  <action name="actionExport">
-   <property name="icon">
-    <iconset resource="resourse.qrc">
-     <normaloff>:/Resources/export.png</normaloff>:/Resources/export.png</iconset>
-   </property>
-   <property name="text">
-    <string>Export</string>
-   </property>
-  </action>
   <action name="actionStart">
    <property name="icon">
     <iconset resource="resourse.qrc">
@@ -191,7 +529,7 @@
   <action name="actionShutdown">
    <property name="icon">
     <iconset resource="resourse.qrc">
-     <normaloff>:/Resources/stop.png</normaloff>:/Resources/stop.png</iconset>
+     <normaloff>:/Resources/shutdown.png</normaloff>:/Resources/shutdown.png</iconset>
    </property>
    <property name="text">
     <string>Shutdown</string>

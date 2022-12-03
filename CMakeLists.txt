@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.17)
 project(q_qemu)
 
 set(CMAKE_CXX_STANDARD 14)
-# set(CMAKE_PREFIX_PATH "D:/Qt/Qt5.13.2/5.13.2/mingw73_64")
-set(CMAKE_PREFIX_PATH "D:/Qt/Qt5.12.11/5.12.11/mingw73_64")
+set(CMAKE_PREFIX_PATH "D:/Qt/Qt5.13.2/5.13.2/mingw73_64")
+# set(CMAKE_PREFIX_PATH "D:/Qt/Qt5.12.11/5.12.11/mingw73_64")
 
 set(APP_RC resourse.qrc)
 

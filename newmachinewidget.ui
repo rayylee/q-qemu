@@ -163,6 +163,114 @@
               <property name="title">
                <string>CPU Setting</string>
               </property>
+              <layout class="QGridLayout" name="gridLayout_10">
+               <item row="0" column="0">
+                <layout class="QVBoxLayout" name="verticalLayout_7">
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_11" stretch="2,4,4">
+                   <item>
+                    <widget class="QLabel" name="label_6">
+                     <property name="text">
+                      <string>Sockets:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QSpinBox" name="cpuSocketSpinBox">
+                     <property name="minimum">
+                      <number>1</number>
+                     </property>
+                     <property name="maximum">
+                      <number>8</number>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_7">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_10" stretch="2,4,4">
+                   <item>
+                    <widget class="QLabel" name="label_2">
+                     <property name="text">
+                      <string>Cores:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QSpinBox" name="cpuCoreSpinBox">
+                     <property name="minimum">
+                      <number>1</number>
+                     </property>
+                     <property name="maximum">
+                      <number>16</number>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_6">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="2,4,4">
+                   <item>
+                    <widget class="QLabel" name="label">
+                     <property name="text">
+                      <string>Threads:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QSpinBox" name="cpuThreadSpinBox">
+                     <property name="minimum">
+                      <number>1</number>
+                     </property>
+                     <property name="maximum">
+                      <number>2</number>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_3">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
              </widget>
             </item>
            </layout>
@@ -178,12 +286,102 @@
            <layout class="QVBoxLayout" name="verticalLayout_4">
             <item>
              <widget class="QGroupBox" name="groupBox_2">
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
               <property name="title">
                <string>Memory Setting</string>
               </property>
+              <layout class="QGridLayout" name="gridLayout_9">
+               <item row="0" column="0">
+                <layout class="QHBoxLayout" name="hLayout_memory" stretch="2,4,4">
+                 <item>
+                  <widget class="QLabel" name="label_Memory">
+                   <property name="text">
+                    <string>Memory:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QSpinBox" name="memorySpinBox">
+                   <property name="minimum">
+                    <number>512</number>
+                   </property>
+                   <property name="maximum">
+                    <number>40960</number>
+                   </property>
+                   <property name="singleStep">
+                    <number>512</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_Mib">
+                   <property name="text">
+                    <string>M</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
              </widget>
             </item>
            </layout>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="tab_accelerator">
+         <attribute name="title">
+          <string>Accelerator</string>
+         </attribute>
+         <layout class="QGridLayout" name="gridLayout_11">
+          <item row="0" column="0">
+           <widget class="QGroupBox" name="groupBox_accelerator">
+            <property name="title">
+             <string>Accelerator Setting</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_12">
+             <item row="0" column="0">
+              <layout class="QHBoxLayout" name="horizontalLayout_12" stretch="2,4,4">
+               <item>
+                <widget class="QLabel" name="label_7">
+                 <property name="text">
+                  <string>Accelerator:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="acceleratorComboBox">
+                 <item>
+                  <property name="text">
+                   <string>tcg</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>whpx</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_8">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -199,7 +397,7 @@
    </property>
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0">
-     <layout class="QHBoxLayout" name="horizontalLayout_disks" stretch="3,7">
+     <layout class="QHBoxLayout" name="horizontalLayout_disks" stretch="0,0">
       <item>
        <widget class="QLabel" name="label_disks">
         <property name="text">
@@ -211,69 +409,171 @@
        </widget>
       </item>
       <item>
-       <widget class="QTabWidget" name="tabWidget_disks">
-        <property name="currentIndex">
-         <number>0</number>
-        </property>
-        <widget class="QWidget" name="tab_disk1">
-         <attribute name="title">
-          <string>hd1</string>
-         </attribute>
-         <layout class="QGridLayout" name="gridLayout_4">
-          <item row="0" column="0">
-           <layout class="QVBoxLayout" name="verticalLayout_2">
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,2,5">
+       <layout class="QVBoxLayout" name="verticalLayout_6" stretch="6,1,3">
+        <item>
+         <widget class="QTabWidget" name="tabWidget_disks">
+          <property name="currentIndex">
+           <number>0</number>
+          </property>
+          <widget class="QWidget" name="tab_disk1">
+           <attribute name="title">
+            <string>hd1</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_4">
+            <item row="0" column="0">
+             <layout class="QVBoxLayout" name="verticalLayout_2">
               <item>
-               <widget class="QLabel" name="labeltype_disk1">
-                <property name="text">
-                 <string>Type: </string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QComboBox" name="disk1ComboBox">
+               <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,2,5">
                 <item>
-                 <property name="text">
-                  <string>qcow2</string>
-                 </property>
+                 <widget class="QLabel" name="labeltype_disk1">
+                  <property name="text">
+                   <string>Type: </string>
+                  </property>
+                 </widget>
                 </item>
                 <item>
-                 <property name="text">
-                  <string>raw</string>
-                 </property>
+                 <widget class="QComboBox" name="disk1ComboBox">
+                  <item>
+                   <property name="text">
+                    <string>qcow2</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>raw</string>
+                   </property>
+                  </item>
+                 </widget>
                 </item>
-               </widget>
+                <item>
+                 <spacer name="horizontalSpacer">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
               </item>
               <item>
-               <spacer name="horizontalSpacer">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
+               <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,5,2">
+                <item>
+                 <widget class="QLabel" name="labelpath_disk1">
+                  <property name="text">
+                   <string>Path:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="disk1Path"/>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="choseDisk1Button">
+                  <property name="text">
+                   <string>Chose</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </item>
              </layout>
             </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,5,2">
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_disk2">
+           <attribute name="title">
+            <string>hd2</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_7">
+            <item row="0" column="0">
+             <layout class="QVBoxLayout" name="verticalLayout_5">
               <item>
-               <widget class="QLabel" name="labelpath_disk1">
+               <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="1,2,5">
+                <item>
+                 <widget class="QLabel" name="labeltype_disk2">
+                  <property name="text">
+                   <string>Type:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="disk2ComboBox">
+                  <item>
+                   <property name="text">
+                    <string>qcow2</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>raw</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_2">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="1,5,2">
+                <item>
+                 <widget class="QLabel" name="labelpath_disk2">
+                  <property name="text">
+                   <string>Path:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="disk2Path"/>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="choseDisk2Button">
+                  <property name="text">
+                   <string>Chose</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_cdrom">
+           <attribute name="title">
+            <string>cdrom</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_8">
+            <item row="0" column="0">
+             <layout class="QHBoxLayout" name="hLayout_cdrom">
+              <item>
+               <widget class="QLabel" name="label_cdrom">
                 <property name="text">
                  <string>Path:</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="disk1Path"/>
+               <widget class="QLineEdit" name="cdromPath"/>
               </item>
               <item>
-               <widget class="QPushButton" name="choseDisk1Button">
+               <widget class="QPushButton" name="choseCdromButton">
                 <property name="text">
                  <string>Chose</string>
                 </property>
@@ -282,108 +582,72 @@
              </layout>
             </item>
            </layout>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="tab_disk2">
-         <attribute name="title">
-          <string>hd2</string>
-         </attribute>
-         <layout class="QGridLayout" name="gridLayout_7">
-          <item row="0" column="0">
-           <layout class="QVBoxLayout" name="verticalLayout_5">
+          </widget>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="bootOrderLabel">
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <property name="text">
+           <string>Boot Order:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_9">
+          <item>
+           <widget class="QListWidget" name="bootOrderListWidget">
+            <property name="font">
+             <font>
+              <family>Segoe UI Historic</family>
+             </font>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Plain</enum>
+            </property>
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="1,2,5">
-              <item>
-               <widget class="QLabel" name="labeltype_disk2">
-                <property name="text">
-                 <string>Type:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QComboBox" name="disk2ComboBox">
-                <item>
-                 <property name="text">
-                  <string>qcow2</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>raw</string>
-                 </property>
-                </item>
-               </widget>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_2">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
+             <property name="text">
+              <string>hd</string>
+             </property>
             </item>
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="1,5,2">
-              <item>
-               <widget class="QLabel" name="labelpath_disk2">
-                <property name="text">
-                 <string>Path:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="disk2Path"/>
-              </item>
-              <item>
-               <widget class="QPushButton" name="choseDisk2Button">
-                <property name="text">
-                 <string>Chose</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
+             <property name="text">
+              <string>cdrom</string>
+             </property>
             </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="tab_cdrom">
-         <attribute name="title">
-          <string>cdrom</string>
-         </attribute>
-         <layout class="QGridLayout" name="gridLayout_8">
-          <item row="0" column="0">
-           <layout class="QHBoxLayout" name="hLayout_cdrom">
             <item>
-             <widget class="QLabel" name="label_cdrom">
+             <property name="text">
+              <string>network</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_8">
+            <item>
+             <widget class="QPushButton" name="bootOrderUpButton">
               <property name="text">
-               <string>Path:</string>
+               <string>Up</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="cdromPath"/>
-            </item>
-            <item>
-             <widget class="QPushButton" name="choseCdromButton">
+             <widget class="QPushButton" name="bootOrderDownButton">
               <property name="text">
-               <string>Chose</string>
+               <string>Down</string>
               </property>
              </widget>
             </item>
            </layout>
           </item>
          </layout>
-        </widget>
-       </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>

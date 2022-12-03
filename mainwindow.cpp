@@ -2,9 +2,13 @@
 #include <QStandardPaths>
 #include <QLabel>
 #include <QDebug>
+#include <QWindow>
+#include <QProcess>
 #include <QDirIterator>
 #include <QMessageBox>
 #include <utility>
+
+#include <Windows.h>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -38,49 +42,40 @@ MainWindow::MainWindow(QWidget *parent)
         if (file_name.endsWith(".xml")) {
             QString vm_item = file_name.left(file_name.length() - 4);
             ui->vmlistWidget->addItem(vm_item);
+
+            auto *vm = new VirtualMachine(it.filePath());
+
+            connect(vm, &VirtualMachine::send_vm_state_changed,
+                    this, &MainWindow::recv_refresh_vm_state);
+
+            m_vm_map.insert(vm_item, vm);
         }
     }
 
     if (ui->vmlistWidget->count() > 0) {
         ui->vmlistWidget->setCurrentRow(0);
+        for (int i = 0; i < ui->vmlistWidget->count(); i++) {
+            auto item = ui->vmlistWidget->item(i);
+            item->setIcon(QIcon(QPixmap(tr(":/Resources/shutdown_flag.png"))));
+        }
     }
 
-    GlobalSetting s = GlobalSetting(m_app_dir);
-    m_qemu_dir = s.qemu_dir();
-    if (m_qemu_dir.isEmpty()) {
-        m_qemu_dir = QDir::toNativeSeparators("D:/Program Files/qemu");
-        s.set_qemu_dir(m_qemu_dir);
-        s.search_qemu_binary();
-        s.save_config();
-    }
-    m_qemu_binary_path = s.qemu_binary_path();    
-    m_bitmap = new BitMap(s.bitmap_string());
-    m_ssh_port = s.ssh_port();
-    m_monitor_port = s.monitor_port();
+    m_global_setting = new GlobalSetting(m_app_dir);
+    m_bitmap = new BitMap(m_global_setting->bitmap_string());
 }
 
 MainWindow::~MainWindow()
 {
-    GlobalSetting s = GlobalSetting(m_app_dir);
+    qDebug() << "quit";
+
     QString bitmap_string = m_bitmap->to_string();
-    bool config_changed = false;
-    if (s.bitmap_string().compare(bitmap_string)) {
-        s.set_bitmap_string(bitmap_string);
-        config_changed = true;
-    }    
-    if (s.ssh_port().compare(m_ssh_port)) {
-        s.set_ssh_port(m_ssh_port);
-        config_changed = true;
-    }
-    if (s.monitor_port().compare(m_monitor_port)) {
-        s.set_monitor_port(m_monitor_port);
-        config_changed = true;
-    }
-    if (config_changed) {
-        s.save_config();
+    if (m_global_setting->bitmap_string().compare(bitmap_string)) {
+        m_global_setting->set_bitmap_string(bitmap_string);
+        m_global_setting->save_config();
     }
 
     delete m_bitmap;
+    delete m_global_setting;
     delete ui;
 }
 
@@ -96,7 +91,7 @@ void MainWindow::_new_machine_wizard()
         w->set_domain_id(domain_id);
     }
     w->set_app_dir(m_app_dir);
-    w->set_qemu_binary_path(m_qemu_binary_path);
+    w->set_qemu_binary_path(m_global_setting->qemu_binary_path());
 
     connect(w, &NewMachineWidget::send_new_machine,
             this, &MainWindow::recv_new_machine);
@@ -110,12 +105,19 @@ void MainWindow::recv_new_machine(const QString& vm_name)
     ui->vmlistWidget->addItem(vm_name);
     int domain_id = m_bitmap->get_first_zero() + 1;
     m_bitmap->set(domain_id - 1);
+
+    QDir dir_app(m_app_dir);
+    QString xml_path = QDir::toNativeSeparators(
+            dir_app.absoluteFilePath(vm_name + ".xml"));
+
+    m_vm_map.insert(vm_name, new VirtualMachine(xml_path));
 }
 
 void MainWindow::recv_qemu_dir(QString qemu_dir, QString qemu_binary_path)
 {
-    m_qemu_dir = std::move(qemu_dir);
-    m_qemu_binary_path = std::move(qemu_binary_path);
+    m_global_setting->set_qemu_dir(std::move(qemu_dir));
+    m_global_setting->set_qemu_binary(std::move(qemu_binary_path));
+    m_global_setting->save_config();
 }
 
 void MainWindow::on_actionAbout_triggered()
@@ -135,24 +137,6 @@ void MainWindow::on_actionNew1_triggered()
 void MainWindow::on_actionNew2_triggered()
 {
     _new_machine_wizard();
-}
-
-QString MainWindow::_get_current_vm_xml_path()
-{
-    QList<QListWidgetItem*> items = ui->vmlistWidget->selectedItems();
-    if (items.isEmpty()) {
-        return QString("");
-    }
-
-    QDir dir_app(m_app_dir);
-    QString xml_path = QDir::toNativeSeparators(
-                dir_app.absoluteFilePath(items.at(0)->text() + ".xml"));
-
-    QFileInfo file_info(xml_path);
-    if(!file_info.isFile()) {
-         return QString("");
-    }
-    return xml_path;
 }
 
 void MainWindow::_main_setting()
@@ -289,7 +273,11 @@ void MainWindow::_delete_vm(const QString& vm_name)
 
     if (should_remove) {
         int cur_index = ui->vmlistWidget->row(item);
-        ui->vmlistWidget->takeItem(cur_index);        
+        ui->vmlistWidget->takeItem(cur_index);
+        if (m_vm_map.contains(vm_name)) {
+            m_vm_map.value(vm_name)->stop();
+            m_vm_map.remove(vm_name);
+        }
         delete item;
     }
 }
@@ -315,33 +303,38 @@ void MainWindow::recv_delete_vm()
 
 void MainWindow::on_actionStart_triggered()
 {
-    QString xml_path = _get_current_vm_xml_path();
-
-    if (xml_path.length() <= 0) {
+    QList<QListWidgetItem*> items = ui->vmlistWidget->selectedItems();
+    if (items.isEmpty()) {
         return;
     }
 
-    VirtualMachine vm = VirtualMachine(xml_path);
+    auto vm = m_vm_map.value((items.at(0)->text()));
 
-    vm.start(m_ssh_port, m_monitor_port);
+    vm->start(m_global_setting->ssh_port(),
+             m_global_setting->monitor_port());
+
 }
 
 void MainWindow::_cmd_qmp(QString& cmd)
 {
-    QString xml_path = _get_current_vm_xml_path();
-    if (xml_path.length() <= 0) {
+    QList<QListWidgetItem*> items = ui->vmlistWidget->selectedItems();
+    if (items.isEmpty()) {
         return;
     }
 
-    VirtualMachine vm = VirtualMachine(xml_path);
+    auto vm = m_vm_map.value((items.at(0)->text()));
 
-    uint16_t monitor_listen = vm.domain_id().toUShort()
-             + m_monitor_port.toUShort() - 1;
+    uint16_t monitor_listen = vm->domain_id().toUShort() +
+            m_global_setting->monitor_port().toUShort() - 1;
+
+    const char *data = qPrintable(QString("%1\n").arg(cmd));
+    vm->process_write(data, static_cast<qint64>(strlen(data)));
+    return;
 
     auto *monitor_socket = new QTcpSocket();
     monitor_socket->connectToHost("localhost",
                                     monitor_listen,
-                                    QIODevice::ReadWrite);
+                                    QIODevice::ReadWrite);    
 
     monitor_socket->waitForConnected(100);
 
@@ -364,4 +357,115 @@ void MainWindow::on_actionPoweroff_triggered()
 {
     QString cmd = QString("quit");
     _cmd_qmp(cmd);
+}
+
+void MainWindow::on_vmlistWidget_currentRowChanged(int currentRow)
+{
+    auto item = ui->vmlistWidget->item(currentRow);
+    auto vm = m_vm_map.value((item->text()));
+
+    ui->vmNameLabel->setText(vm->name());
+    ui->vmStateLabel->setText(vm->state().to_string());
+
+    auto ssh_port = vm->ssh_listen_port();
+    if (ssh_port > 0) {
+        ui->vmSshPortLabel->setText(QString("%1").
+                                    arg(vm->ssh_listen_port()));
+    } else {
+        ui->vmSshPortLabel->setText("-");
+    }
+
+    ui->vmAcceleratorLabel->setText(vm->accelerator());
+    ui->vmCpuLabel->setText(
+                QString("Sockets:%1  Cores:%2  Threads:%3")
+                .arg(vm->cpu_sockets())
+                .arg(vm->cpu_cores())
+                .arg(vm->cpu_threads()));
+    ui->vmCurrentMemoryLabel->setText(vm->current_memory());
+
+    int max_length_disk = 400;
+    QString path = vm->disk(0);
+    if (path.length() > max_length_disk) {
+        ui->vmHD1LineEdit->setText("..." + path.right(max_length_disk));
+    } else {
+        if (path.length() > 0) {
+            ui->vmHD1LineEdit->setText(path);
+        } else {
+            ui->vmHD1LineEdit->clear();
+        }
+    }
+    ui->vmHD1LineEdit->setToolTip(path);
+    ui->vmHD1LineEdit->setCursorPosition(0);
+
+    path = vm->disk(1);
+    if (path.length() > max_length_disk) {
+        ui->vmHD2LineEdit->setText("..." + path.right(max_length_disk));
+    } else {
+        if (path.length() > 0) {
+            ui->vmHD2LineEdit->setText(path);
+        } else {
+            ui->vmHD2LineEdit->clear();
+        }
+    }
+    ui->vmHD2LineEdit->setToolTip(path);
+    ui->vmHD2LineEdit->setCursorPosition(0);
+
+    path = vm->cdrom(0);
+    if (path.length() > max_length_disk) {
+        ui->vmCDRomLineEdit->setText("..." + path.right(max_length_disk));
+    } else {
+        if (path.length() > 0) {
+            ui->vmCDRomLineEdit->setText(path);
+        } else {
+            ui->vmCDRomLineEdit->clear();
+        }
+    }
+    ui->vmCDRomLineEdit->setToolTip(path);
+    ui->vmCDRomLineEdit->setCursorPosition(0);
+}
+
+void MainWindow::recv_refresh_vm_state(const QString& name)
+{
+    QListWidgetItem *item = ui->vmlistWidget->currentItem();
+    if (!item) {
+        return;
+    }
+
+    auto vm = m_vm_map.value((item->text()));
+
+    if (!vm->name().compare(name)) {
+        if (vm->state().value() == VMState::StateRunning) {
+            item->setIcon(QIcon(QPixmap(tr(":/Resources/start_flag.png"))));
+        } else {
+            item->setIcon(QIcon(QPixmap(tr(":/Resources/shutdown_flag.png"))));
+        }
+
+        ui->vmStateLabel->setText(vm->state().to_string());        
+
+        auto ssh_port = vm->ssh_listen_port();
+        if (ssh_port > 0) {
+            ui->vmSshPortLabel->setText(QString("%1").
+                                        arg(vm->ssh_listen_port()));
+        } else {
+            ui->vmSshPortLabel->setText("-");
+        }
+
+        auto pid = vm->process_id();
+        if (pid != 0) {
+            WId wid = (WId)FindWindow(NULL, L"QEMU (testvm1_1)");
+            // AttachWinThreadKeyMouseEvent(wid);
+
+            QWindow* window = QWindow::fromWinId(wid);
+            QWidget* widget = QWidget::createWindowContainer(
+                        window, ui->consoleWidget, Qt::Widget);
+
+            // widget->setParent(ui->consoleWidget->window());
+            // widget->show();
+        }
+    }
+}
+
+void MainWindow::on_actionExit_triggered()
+{
+    exit(0);
 }

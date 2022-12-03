@@ -16,6 +16,7 @@ public:
     void save_config();
 
     void set_qemu_dir(QString in) { m_qemu_dir = std::move(in); }
+    void set_qemu_binary(QString in) { m_qemu_binary_path = std::move(in); }
     void set_bitmap_string(QString in) { m_bitmap_string = std::move(in); }
     void set_monitor_port(QString in) { m_monitor_port = std::move(in); }
     void set_ssh_port(QString in) { m_ssh_port = std::move(in); }
